@@ -1,5 +1,5 @@
 import "./Register.css";
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -32,10 +32,16 @@ const Register: React.FC = () => {
   const handleRegisterUser = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
-    if (!usernameRef.current) {
+    if (
+      !usernameRef.current?.value ||
+      !emailRef.current?.value ||
+      !phoneNumberRef.current?.value ||
+      !passwordRef.current?.value ||
+      !confirmPasswordRef.current?.value
+    ) {
       toast({
         title: "Empty Fields",
-        description: "Please fill in the username field.",
+        description: "Please fill in all the fields.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -43,23 +49,10 @@ const Register: React.FC = () => {
       return;
     }
 
-    if (passwordRef.current && confirmPasswordRef.current) {
-      if (passwordRef.current.value !== confirmPasswordRef.current.value) {
-        toast({
-          title: "Passwords do not match",
-          description: "Please enter the same password in both fields.",
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-        });
-        return;
-      }
-    }
-
-    if (!passwordRef.current || !confirmPasswordRef.current) {
+    if (passwordRef.current.value !== confirmPasswordRef.current.value) {
       toast({
-        title: "Empty Fields",
-        description: "Please fill in the password field.",
+        title: "Passwords do not match",
+        description: "Please enter the same password in both fields.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -67,37 +60,15 @@ const Register: React.FC = () => {
       return;
     }
 
-    if (!emailRef.current) {
-      toast({
-        title: "Empty Fields",
-        description: "Please fill in the email field.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-      return;
-    }
+    dispatch(registerUser({
+      username: usernameRef.current.value,
+      email: emailRef.current.value,
+      phoneNumber: parseInt(phoneNumberRef.current.value, 10),
+      password: passwordRef.current.value,
+    }));
+  };
 
-    if (!phoneNumberRef.current) {
-      toast({
-        title: "Empty Fields",
-        description: "Please fill in the phone number field.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-      return;
-    }
-
-    if (usernameRef.current && emailRef.current && phoneNumberRef.current && passwordRef.current) {
-      dispatch(registerUser({
-        username: usernameRef.current.value,
-        email: emailRef.current.value,
-        phoneNumber: parseInt(phoneNumberRef.current.value, 10),
-        password: passwordRef.current.value,
-      }));
-    }
-
+  useEffect(() => {
     if (auth.success) {
       toast({
         title: 'Registration Successful',
@@ -115,7 +86,7 @@ const Register: React.FC = () => {
         isClosable: true,
       });
     }
-  };
+  }, [auth, toast]);
 
   const handleBackToLogin = () => {
     window.location.href = "/login";

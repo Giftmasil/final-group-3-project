@@ -1,0 +1,16 @@
+.emergency-details-header {
+    text-align: center;
+    padding: 15px;
+    font-size: 24px;
+    font-weight: bolder;
+    color: #333;
+    background-color: rgb(230, 230, 230);
+}
+
+.emergency-details-info {
+    text-align: center;
+}
+
+.responder-details-info {
+    text-align: center;
+}

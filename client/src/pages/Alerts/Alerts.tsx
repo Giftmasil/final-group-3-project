@@ -51,7 +51,11 @@ const Alerts: React.FC = () => {
     <div>
       <TopBar />
       <h2>Current Emergencies</h2>
-      <ul>
+      <h2>You have {emergencies.length} total emergencies</h2>
+      {emergencies.length === 0 ? (
+        <h1>No emergencies yet</h1>
+      ) : (
+        <ul className="all-cards-container">
         {emergencies.map((emergency) => (
           <EmergencyItemComponent
             key={emergency._id}
@@ -60,6 +64,8 @@ const Alerts: React.FC = () => {
           />
         ))}
       </ul>
+      )}
+      
     </div>
   );
 };
@@ -69,10 +75,7 @@ interface EmergencyItemProps {
   setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const EmergencyItemComponent: React.FC<EmergencyItemProps> = ({
-  emergency,
-  setRefresh,
-}) => {
+const EmergencyItemComponent: React.FC<EmergencyItemProps> = ({ emergency, setRefresh }) => {
   const { user } = useSelector((state: RootState) => state.user);
   const dispatch: AppDispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -137,87 +140,85 @@ const EmergencyItemComponent: React.FC<EmergencyItemProps> = ({
     onClose();
   };
 
+  const handleUserClick = () => {
+    navigate(`/search?query=${emergency.user}`);
+  };
+
   return (
-    <li key={emergency._id} className="emergency-container">
-      <h3>{emergency.title}</h3>
-      {emergency.createdAt && (
-        <p>
-          <span style={{ fontWeight: "bolder" }}>Time requested:</span>{" "}
-          {new Date(emergency.createdAt).toLocaleString()}
-        </p>
-      )}
-      <p>Status: {emergency.status}</p>
-      <Box tabIndex={-1} aria-label="Focus moved to this box">
-        View more content
-      </Box>
-      <Button mt={4} onClick={onOpen}>
-        Open Modal
-      </Button>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader className="modal-header" onClick={() => handleModalHeaderClick(emergency._id!)}>
-            Emergency Details
-          </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <p>
-              <span style={{ fontWeight: "bolder" }}>User ID</span>:{" "}
-              {emergency.user}
-            </p>
-            <p>
-              <span style={{ fontWeight: "bolder" }}>Status</span>:{" "}
-              {emergency.status}
-            </p>
-            <h2>
-              <span style={{ fontWeight: "bolder", fontSize: "2rem" }}>
-                {emergency.title}
-              </span>
-            </h2>
-            <p>
-              <span style={{ fontWeight: "bolder" }}>Location:</span>{" "}
-              {emergency.place}
-            </p>
-            <p>
-              <span style={{ fontWeight: "bolder" }}>Condition:</span>{" "}
-              {emergency.condition}
-            </p>
-            <p>
-              <span style={{ fontWeight: "bolder" }}>Description:</span>{" "}
-              {emergency.description}
-            </p>
-            <p>
-              <span style={{ fontWeight: "bolder" }}>Responder:</span>{" "}
-              {emergency.responder}
-            </p>
-            {emergency.createdAt && (
+    <li key={emergency._id} className="emergency-container card">
+      <Box className="card-content">
+        <h3 className="emergency-title">{emergency.title}</h3>
+        <p className={`emergency-status status-${emergency.status.toLowerCase()}`}>Status: {emergency.status}</p>
+        {emergency.createdAt && (
+          <p className="emergency-time">
+            <span style={{ fontWeight: "bolder" }}>Time requested:</span>{" "}
+            {new Date(emergency.createdAt).toLocaleString()}
+          </p>
+        )}
+        <Button className="modal-button" mt={4} onClick={onOpen}>
+          <i className="fa-solid fa-maximize"></i>
+        </Button>
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader className="modal-header" onClick={() => handleModalHeaderClick(emergency._id!)}>
+              Emergency Details
+            </ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
               <p>
-                <span style={{ fontWeight: "bolder" }}>Time requested:</span>{" "}
-                {new Date(emergency.createdAt).toLocaleString()}
+                <span onClick={handleUserClick} style={{ fontWeight: "bolder", cursor: "pointer", color: "" }}>User ID</span>:{" "}
+                {emergency.user}
               </p>
-            )}
-            <p>Modal Content</p>
-          </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
-            </Button>
-            {(emergency.status === "Delivered" ||
-              emergency.status === "Pending") &&
-              (user?.roles.includes("Admin") ||
-                user?.roles.includes("Employee")) && (
-                <Button
-                  variant="ghost"
-                  onClick={
-                    emergency.status === "Delivered" ? handleAccept : handleDone
-                  }
-                >
-                  {emergency.status === "Delivered" ? "Accept" : "Done"}
-                </Button>
+              <p>
+                <span style={{ fontWeight: "bolder" }}>Status</span>:{" "}
+                {emergency.status}
+              </p>
+              <h2>
+                <span style={{ fontWeight: "bolder", fontSize: "2rem" }}>
+                  {emergency.title}
+                </span>
+              </h2>
+              <p>
+                <span style={{ fontWeight: "bolder" }}>Location:</span>{" "}
+                {emergency.place}
+              </p>
+              <p>
+                <span style={{ fontWeight: "bolder" }}>Condition:</span>{" "}
+                {emergency.condition}
+              </p>
+              <p>
+                <span style={{ fontWeight: "bolder" }}>Description:</span>{" "}
+                {emergency.description}
+              </p>
+              <p>
+                <span style={{ fontWeight: "bolder" }}>Responder:</span>{" "}
+                {emergency.responder}
+              </p>
+              {emergency.createdAt && (
+                <p>
+                  <span style={{ fontWeight: "bolder" }}>Time requested:</span>{" "}
+                  {new Date(emergency.createdAt).toLocaleString()}
+                </p>
               )}
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+            </ModalBody>
+            <ModalFooter>
+              <Button colorScheme="blue" mr={3} onClick={onClose}>
+                Close
+              </Button>
+              {(emergency.status === "Delivered" || emergency.status === "Pending") &&
+                (user?.roles.includes("Admin") || user?.roles.includes("Employee")) && (
+                  <Button
+                    variant="ghost"
+                    onClick={emergency.status === "Delivered" ? handleAccept : handleDone}
+                  >
+                    {emergency.status === "Delivered" ? "Accept" : "Done"}
+                  </Button>
+                )}
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </Box>
     </li>
   );
 };

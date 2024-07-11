@@ -5,9 +5,10 @@ import { AppDispatch, RootState } from '../../redux/ReduxStore';
 import { createEmergency } from '../../redux/slices/EmergencySlice';
 import { Emergency } from '../../models/Emergency';
 import { useNavigate } from 'react-router-dom';
-import TopBar from '../../components/topbar/TopBar';
+import { Select, Flex, Box, Stack, FormControl, FormLabel, Button, useBreakpointValue, Input, Heading, useToast } from '@chakra-ui/react';
 
 const EmergencyForm: React.FC = () => {
+
     const [typeOfEmergency, setTypeOfEmergency] = useState<string>('fire');
     const [conditionOfThePeople, setConditionOfThePeople] = useState<string>('BleedingButContious');
     const [description, setDescription] = useState<string>('');
@@ -15,6 +16,7 @@ const EmergencyForm: React.FC = () => {
     const [latitude, setLatitude] = useState<number | null>(null);
     const [longitude, setLongitude] = useState<number | null>(null);
     const navigate = useNavigate();
+    const toast = useToast(); 
 
     const dispatch = useDispatch<AppDispatch>();
     const { loading, success, error } = useSelector((state: RootState) => state.emergency);
@@ -59,7 +61,7 @@ const EmergencyForm: React.FC = () => {
         }
     }, []);
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLButtonElement>) => {
         event.preventDefault();
 
         console.log(user?._id);
@@ -85,6 +87,23 @@ const EmergencyForm: React.FC = () => {
             const resultAction = await dispatch(createEmergency(emergencyData));
             if (createEmergency.fulfilled.match(resultAction)) {
                 const createdEmergency = resultAction.payload;
+                if (success) {
+                    toast({
+                        title: "Success!",
+                        description: "Your message has been sent successfully.",
+                        status: "success",
+                        duration: 5000,
+                        isClosable: true,
+                    });
+                } else if (error) {
+                    toast({
+                        title: "Error",
+                        description: "An unexpected error occurred. Please try again.",
+                        status: "error",
+                        duration: 5000,
+                        isClosable: true,
+                    });
+                }
                 navigate(`/emergency/${createdEmergency._id}`);
             }
         } catch (err) {
@@ -99,61 +118,92 @@ const EmergencyForm: React.FC = () => {
         setLongitude(null);
     };
 
+    const handleCancel = (event: React.FormEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        navigate('/');
+    }
+
+    const formWidth = useBreakpointValue({ base: "90%", md: "70%", lg: "50%" });
+
+
     return (
-        <div>
-            <TopBar />
-            <h1>Quick assessment</h1>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="typeOfEmergency">Type Of Emergency</label>
-                <select
-                    name="typeOfEmergency"
-                    id="typeOfEmergency"
-                    value={typeOfEmergency}
+        <Flex align="center" justify="center" direction={{ base: "column", md: "row" }} p={4}>
+            <Box
+                my={8}
+                mx={{ base: 0, md: 4 }}
+                textAlign="left"
+                width={formWidth}
+                p={8}
+                borderRadius="lg"
+                overflow="hidden"
+                bg="white"
+                borderWidth={1}
+                boxShadow="lg"
+            >
+                <Heading as="h2" size="lg" mb={6} textAlign="center">
+                    Quick Assessment
+                </Heading>
+                <form>
+                    <Stack spacing={6} direction = "column">
+                    <FormControl id="condition">
+                            <FormLabel>Type of Emergenct</FormLabel>
+                            <Select 
+                            placeholder="Select emergency"
+                            value={typeOfEmergency}
                     onChange={(e) => setTypeOfEmergency(e.target.value)}
-                >
-                    <option value="fire">Fire</option>
-                    <option value="earthquake">Earthquake</option>
-                    <option value="roadaccident">Road Accident</option>
-                    <option value="other">Other</option>
-                </select>
-                <label htmlFor="conditionOfThePeople">Condition Of the People</label>
-                <select
-                    name="conditionOfThePeople"
-                    id="conditionOfThePeople"
-                    value={conditionOfThePeople}
-                    onChange={(e) => setConditionOfThePeople(e.target.value)}
-                >
-                    <option value="Bleeding but conscious">Bleeding but conscious</option>
-                    <option value="Unconscious">Unconscious</option>
-                    <option value="Sick">Sick</option>
-                    <option value="Other">Other</option>
-                </select>
-                <label htmlFor="Description">Brief Description</label>
-                <textarea
-                    name="Description"
-                    id="Description"
-                    cols={30}
-                    rows={10}
-                    placeholder="Brief summary of what you saw"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                ></textarea>
-                <label htmlFor="location">Location</label>
-                <input
-                    type="text"
-                    name="location"
-                    id="location"
-                    placeholder="Location"
-                    value={location}
-                    readOnly
-                />
-                <button type="submit" disabled={loading}>Submit</button>
-                <button type="reset">Cancel</button>
-            </form>
-            {error && <p>Error, please try again</p>}
-            {success && <p>Success, request sent successfully</p>}
-        </div>
+                            >
+                                <option value="Road Accident">Road Accident</option>
+                                <option value="Medical Issue">Medical Issue</option>
+                                <option value="Fire">Fire</option>
+                            </Select>
+                        </FormControl>
+
+                        <FormControl id="condition">
+                            <FormLabel>Condition of the People</FormLabel>
+                            <Select 
+                            placeholder="Select answer"
+                            value={conditionOfThePeople}
+                            onChange={(e) => setConditionOfThePeople(e.target.value)}
+                            >
+                                <option value="Unconscious">Unconscious</option>
+                                <option value="Bleeding">Bleeding</option>
+                                <option value="Moderate">Moderate</option>
+                            </Select>
+                        </FormControl>
+
+                        <FormControl id="description">
+                            <FormLabel>Briefly Describe What You Saw</FormLabel>
+                            <Input 
+                            placeholder='Briefly describe what you saw' 
+                            variant="outline" size="md" 
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}/>
+                        </FormControl>
+                        
+                        <FormControl id="location">
+                            <FormLabel>Location</FormLabel>
+                            <Input 
+                            placeholder='Location' 
+                            variant="outline" size="md" 
+                            value={location}
+                            readOnly/>
+                        </FormControl>
+                    </Stack>
+                    
+                    <Stack spacing={4} direction="row" mt={6} align="center">
+                        <Button colorScheme="purple" variant="solid" isLoading={loading} onClick= {handleSubmit}>
+                            Submit
+                        </Button>
+                        <Button onClick={handleCancel} colorScheme="purple" variant="outline">
+                            Cancel
+                        </Button>
+                    </Stack>
+                </form>
+            </Box>
+        </Flex>
     );
 };
 
 export default EmergencyForm;
+
+

@@ -50,7 +50,7 @@ const Records: React.FC = () => {
     <div>
       <TopBar />
       <h2>Records</h2>
-      <ul>
+      <ul className="all-cards-container">
         {emergencies.map((emergency) => (
           <RecordItemComponent key={emergency._id} emergency={emergency} />
         ))}
@@ -67,63 +67,68 @@ const RecordItemComponent: React.FC<RecordItemProps> = ({ emergency }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <li key={emergency._id} className="record-container">
-      <h3>{emergency.title}</h3>
-      <p>Status: {emergency.status}</p>
-      <Box tabIndex={-1} aria-label="Focus moved to this box">
-        View more content
-      </Box>
-      <Button mt={4} onClick={onOpen}>
-        View Details
-      </Button>
+    <li key={emergency._id} className="emergency-container card">
+      <Box tabIndex={-1} aria-label="Focus moved to this box" className="card-content">
+        <h3 className="record-title">{emergency.title}</h3>
+        <p className={`emergency-status status-${emergency.status.toLowerCase()}`}>Status: {emergency.status}</p>
+        {emergency.updatedAt && (
+          <p className="emergency-time">
+            <span style={{ fontWeight: "bolder" }}>Time requested:</span>{" "}
+            {new Date(emergency.updatedAt).toLocaleString()}
+          </p>
+        )}
+        <Button className="modal-button" mt={4} onClick={onOpen}>
+          <i className="fa-solid fa-maximize"></i>
+        </Button>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Emergency Details</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <p>
-              <span style={{ fontWeight: "bolder" }}>User ID</span>: {emergency.user}
-            </p>
-            <p>
-              <span style={{ fontWeight: "bolder" }}>Status</span>: {emergency.status}
-            </p>
-            <h2>
-              <span style={{ fontWeight: "bolder", fontSize: "2rem" }}>
-                {emergency.title}
-              </span>
-            </h2>
-            <p>
-              <span style={{ fontWeight: "bolder" }}>Location:</span> {emergency.place}
-            </p>
-            <p>
-              <span style={{ fontWeight: "bolder" }}>Condition:</span> {emergency.condition}
-            </p>
-            <p>
-              <span style={{ fontWeight: "bolder" }}>Description:</span> {emergency.description}
-            </p>
-            <p>
-              <span style={{ fontWeight: "bolder" }}>Responder:</span> {emergency.responder}
-            </p>
-            {emergency.createdAt && (
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Emergency Details</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
               <p>
-                <span style={{ fontWeight: "bolder" }}>Time requested:</span> {new Date(emergency.createdAt).toLocaleString()}
+                <span style={{ fontWeight: "bolder" }}>User ID</span>: {emergency.user}
               </p>
-            )}
-            {emergency.updatedAt && (
+              <p>
+                <span style={{ fontWeight: "bolder" }}>Status</span>: {emergency.status}
+              </p>
+              <h2>
+                <span style={{ fontWeight: "bolder", fontSize: "2rem" }}>
+                  {emergency.title}
+                </span>
+              </h2>
+              <p>
+                <span style={{ fontWeight: "bolder" }}>Location:</span> {emergency.place}
+              </p>
+              <p>
+                <span style={{ fontWeight: "bolder" }}>Condition:</span> {emergency.condition}
+              </p>
+              <p>
+                <span style={{ fontWeight: "bolder" }}>Description:</span> {emergency.description}
+              </p>
+              <p>
+                <span style={{ fontWeight: "bolder" }}>Responder:</span> {emergency.responder}
+              </p>
+              {emergency.createdAt && (
                 <p>
-                  <span style={{ fontWeight: "bolder" }}>Time resolved:</span> {new Date(emergency.updatedAt).toLocaleString()}
+                  <span style={{ fontWeight: "bolder" }}>Time requested:</span> {new Date(emergency.createdAt).toLocaleString()}
                 </p>
-            )}
-          </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+              )}
+              {emergency.updatedAt && (
+                  <p>
+                    <span style={{ fontWeight: "bolder" }}>Time resolved:</span> {new Date(emergency.updatedAt).toLocaleString()}
+                  </p>
+              )}
+            </ModalBody>
+            <ModalFooter>
+              <Button colorScheme="blue" mr={3} onClick={onClose}>
+                Close
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </Box>
     </li>
   );
 };

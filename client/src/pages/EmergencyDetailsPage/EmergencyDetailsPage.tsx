@@ -10,6 +10,7 @@ import TopBar from "../../components/topbar/TopBar";
 import { Emergency } from "../../models/Emergency";
 import { User } from "../../models/User";
 import { RootState } from '../../redux/ReduxStore';
+import { defineStyle, defineStyleConfig, Spinner } from '@chakra-ui/react'
 
 const EmergencyDetailsPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -30,12 +31,11 @@ const EmergencyDetailsPage: React.FC = () => {
                 if (id) {
                     const response = await dispatch(fetchSingleEmergency(id)).unwrap();
                     setCurrentEmergency(response);
-                }
 
-                if (currentEmergency?.responder) {
-                    const userId = currentEmergency.responder;
-                    const userResponse = await dispatch(fetchUser({ userId })).unwrap();
-                    setRespondent(userResponse);
+                    if (response.responder) {
+                        const userResponse = await dispatch(fetchUser({ userId: response.responder })).unwrap();
+                        setRespondent(userResponse);
+                    }
                 }
 
                 setLoading(false);
@@ -69,38 +69,47 @@ const EmergencyDetailsPage: React.FC = () => {
         fetchCurrentLocation();
     }, []);
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return (
+        <Spinner
+        thickness='4px'
+        speed='0.65s'
+        emptyColor='gray.200'
+        color='blue.500'
+        size='xxl'
+        />
+    )
+    
     if (error) return <p>{error}</p>;
 
     return (
         <div>
             <TopBar />
-            <h1>Emergency Details</h1>
+            <h1 className="emergency-details-header">Emergency Details</h1>
             {currentEmergency && currentUserLocation && (
                 <div>
                     <UserGPSNavigation
                         userRole={currentUser?.roles}
                         userLatitude={currentUserLocation.latitude.toString()}
                         userLongitude={currentUserLocation.longitude.toString()}
-                        emergencyLatitude={currentEmergency.latitude}
-                        emergencyLongitude={currentEmergency.longitude}
-                        responderLatitude={currentEmergency?.responderLatitude}
-                        responderLongitude={currentEmergency?.responderLongitude}
+                        emergencyLatitude={currentEmergency.latitude.toString()}
+                        emergencyLongitude={currentEmergency.longitude.toString()}
+                        responderLatitude={currentEmergency?.responderLatitude?.toString()}
+                        responderLongitude={currentEmergency?.responderLongitude?.toString()}
                     />
-                    <p><strong>Type of Emergency:</strong> {currentEmergency.title}</p>
-                    <p><strong>Condition of the People:</strong> {currentEmergency.condition}</p>
-                    <p><strong>Description:</strong> {currentEmergency.description}</p>
-                    <p><strong>Location:</strong> {currentEmergency.place}</p>
-                    <p><strong>Latitude:</strong> {currentEmergency.latitude}</p>
-                    <p><strong>Longitude:</strong> {currentEmergency.longitude}</p>
-                    <p><strong>Status:</strong> {currentEmergency.status}</p>
+                    <p className="emergency-details-info"><strong>Type of Emergency:</strong> {currentEmergency.title}</p>
+                    <p className="emergency-details-info"><strong>Condition of the People:</strong> {currentEmergency.condition}</p>
+                    <p className="emergency-details-info"><strong>Description:</strong> {currentEmergency.description}</p>
+                    <p className="emergency-details-info"><strong>Location:</strong> {currentEmergency.place}</p>
+                    <p className="emergency-details-info"><strong>Latitude:</strong> {currentEmergency.latitude}</p>
+                    <p className="emergency-details-info"><strong>Longitude:</strong> {currentEmergency.longitude}</p>
+                    <p className="emergency-details-info"><strong>Status:</strong> {currentEmergency.status}</p>
                 </div>
             )}
             {respondent && (
                 <div>
-                    <p><strong>Responder:</strong> {respondent.username}</p>
-                    <p><strong>Responder Email:</strong> {respondent.email}</p>
-                    <p><strong>Responder Phone:</strong> {respondent.phoneNumber}</p>
+                    <p className="responder-details-info"><strong>Responder:</strong> {respondent.username}</p>
+                    <p className="responder-details-info"><strong>Responder Email:</strong> {respondent.email}</p>
+                    <p className="responder-details-info"><strong>Responder Phone:</strong> {respondent.phoneNumber}</p>
                 </div>
             )}
         </div>
@@ -108,3 +117,5 @@ const EmergencyDetailsPage: React.FC = () => {
 };
 
 export default EmergencyDetailsPage;
+
+

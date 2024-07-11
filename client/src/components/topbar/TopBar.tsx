@@ -33,7 +33,6 @@ const TopBar: React.FC  = () => {
                 <li className="topbar-list-item"><a href="/">Home</a></li>
                 <li className="topbar-list-item"><a href="/alerts">Alerts</a></li>
                 <li className="topbar-list-item"><a href="/records">Records</a></li>
-                <li className="topbar-list-item"><a href="/records">Search</a></li>
                 <li className="topbar-list-item"><a href="/settings"><img id="profilepic" src={loggedInUser?.profileUrl || "https://media.istockphoto.com/id/1437816897/photo/business-woman-manager-or-human-resources-portrait-for-career-success-company-we-are-hiring.jpg?s=612x612&w=is&k=20&c=tw9TuTigzhSlLA_b1Avy0X6GNF9ZFVvgTHIZ9i68Q0I="} width={30} height={30} /></a></li>
                 <form className="search-form" onSubmit={handleSearch}>
                     <input

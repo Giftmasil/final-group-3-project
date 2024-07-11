@@ -113,3 +113,4 @@
 2024/07/10	18:52:17	d30f9355-7d3b-4309-962c-3dfb5b8182c4	CastError: Cast to ObjectId failed for value ":668e5eb242445c01790fb332" (type string) at path "_id" for model "Emergency"	GET	/emergency/:668e5eb242445c01790fb332	http://localhost:5173
 2024/07/10	18:54:48	f95db745-6ab0-418b-b9be-a469dbed08d4	CastError: Cast to ObjectId failed for value ":668e475b42445c01790f953a" (type string) at path "_id" for model "Emergency"	GET	/emergency/:668e475b42445c01790f953a	http://localhost:5173
 2024/07/10	18:54:48	d4949ad1-3b08-45ae-97d6-087f514df143	CastError: Cast to ObjectId failed for value ":668e475b42445c01790f953a" (type string) at path "_id" for model "Emergency"	GET	/emergency/:668e475b42445c01790f953a	http://localhost:5173
+2024/07/11	13:37:38	4fe23975-c257-4b42-9c67-8d74496b856b	ValidationError: User validation failed: email: Path `email` is required.	POST	/auth/register	http://localhost:5173

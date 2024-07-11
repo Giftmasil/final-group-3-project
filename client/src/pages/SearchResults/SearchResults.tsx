@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import './SearchResults.css';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import { User } from '../../models/User';
+import TopBar from '../../components/topbar/TopBar';
+import "./SearchResults.css"
 
 const SearchResults: React.FC = () => {
     const [results, setResults] = useState<User[]>([]);
     const location = useLocation();
-    
+
     const query = new URLSearchParams(location.search).get('query');
 
     useEffect(() => {
@@ -27,21 +28,23 @@ const SearchResults: React.FC = () => {
 
     return (
         <div className="search-results">
-            <h2>Search Results</h2>
+            <TopBar />
+            <h1 className='search-result-header'>Search Results</h1>
+            <h2 className='search-result-length'>{results.length} results found</h2>
             {results.length ? (
                 <ul>
                     {results.map((user) => (
-                        <li key={user._id}>
-                            <p>Username: {user.username}</p>
-                            <p>Email: {user.email}</p>
-                            <p>Phone Number: {user.phoneNumber}</p>
-                            <p>Address: {user.address}</p>
-                            <p>Medical History: {user.medicalHistory}</p>
-                            <p>Current Medication: {user.currentMedication}</p>
-                            <p>Vaccination: {user.vaccination}</p>
-                            <p>Emergency Contact Name: {user.emergencyContactName}</p>
-                            <p>Relationship: {user.relationship}</p>
-                            <p>Emergency Contact Number: {user.emergencyContactNumber}</p>
+                        <li className='search-result-list' key={user._id}>
+                            <p className='search-result-content'>Username: {user.username}</p>
+                            <p className='search-result-content'>Email: {user.email}</p>
+                            <p className='search-result-content'>Phone Number: {user.phoneNumber}</p>
+                            <p className='search-result-content'>Address: {user.address}</p>
+                            <p className='search-result-content'>Medical History: {user.medicalHistory}</p>
+                            <p className='search-result-content'>Current Medication: {user.currentMedication}</p>
+                            <p className='search-result-content'>Vaccination: {user.vaccination}</p>
+                            <p className='search-result-content'>Emergency Contact Name: {user.emergencyContactName}</p>
+                            <p className='search-result-content'>Relationship: {user.relationship}</p>
+                            <p className='search-result-content'>Emergency Contact Number: {user.emergencyContactNumber}</p>
                         </li>
                     ))}
                 </ul>

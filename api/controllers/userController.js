@@ -38,22 +38,29 @@ const searchUsers = async (req, res) => {
         return res.status(400).json({ message: 'Query parameter is required' });
     }
 
-    const regex = new RegExp(query, 'i'); // 'i' flag for case-insensitive search
-
-    const users = await User.find({
-        $or: [
-            { username: { $regex: regex } },
-            { email: { $regex: regex } },
-            { phoneNumber: isNaN(query) ? undefined : Number(query) }, // Check if query is a number for phoneNumber
-            { address: { $regex: regex } },
-            { medicalHistory: { $regex: regex } },
-            { currentMedication: { $regex: regex } },
-            { vaccination: { $regex: regex } },
-            { emergencyContactName: { $regex: regex } },
-            { relationship: { $regex: regex } },
-            { emergencyContactNumber: isNaN(query) ? undefined : Number(query) } // Check if query is a number for emergencyContactNumber
-        ].filter(Boolean) // Remove undefined values from the $or array
-    }).select('-password -refreshToken');
+    let users = [];
+    if (query.match(/^[0-9a-fA-F]{24}$/)) { // Check if query is a valid MongoDB ObjectId
+        const user = await User.findById(query).select('-password -refreshToken').exec();
+        if (user) {
+            users.push(user);
+        }
+    } else {
+        const regex = new RegExp(query, 'i'); // 'i' flag for case-insensitive search
+        users = await User.find({
+            $or: [
+                { username: { $regex: regex } },
+                { email: { $regex: regex } },
+                { phoneNumber: isNaN(query) ? undefined : Number(query) },
+                { address: { $regex: regex } },
+                { medicalHistory: { $regex: regex } },
+                { currentMedication: { $regex: regex } },
+                { vaccination: { $regex: regex } },
+                { emergencyContactName: { $regex: regex } },
+                { relationship: { $regex: regex } },
+                { emergencyContactNumber: isNaN(query) ? undefined : Number(query) }
+            ].filter(Boolean) // Remove undefined values from the $or array
+        }).select('-password -refreshToken');
+    }
 
     if (!users.length) {
         return res.status(404).json({ message: 'No users found' });
@@ -61,6 +68,7 @@ const searchUsers = async (req, res) => {
 
     res.json(users);
 };
+
 
 
 // @desc Create new user

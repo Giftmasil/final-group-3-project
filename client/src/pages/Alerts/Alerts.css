@@ -1,7 +1,64 @@
-.emergency-container {
-    border: 1px solid #ccc;
+li {
+    list-style: none;
 }
 
-.modal-header {
+.card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+  }
+  
+  .card-content {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .emergency-title {
+    font-size: 2em;
+    margin-bottom: 8px;
+    font-weight: bolder;
+  }
+  
+  .emergency-time {
+    color: #555;
+    margin-bottom: 8px;
+  }
+  
+  .emergency-status {
+    font-weight: bold;
+    margin-bottom: 16px;
+    display: flex;
+    justify-self: flex-end;
+  }
+  
+  .modal-header {
     cursor: pointer;
-}
+  }
+
+  .status-delivered {
+    color: red;
+  }
+  
+  .status-pending {
+    color: orange;
+  }
+  
+
+  .all-cards-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 95vw;
+  }
+
+  .modal-button {
+    width: 10%;
+    display: flex;
+    justify-self: flex-end;
+  }

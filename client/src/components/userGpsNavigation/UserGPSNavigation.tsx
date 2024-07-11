@@ -1,5 +1,5 @@
 import "./userGPSNavigation.css";
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import L, { LatLngTuple } from "leaflet";
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
@@ -29,6 +29,15 @@ const UserGPSNavigation: React.FC<UserGPSNavigationProps> = ({
     const routingControlRef = useRef<L.Routing.Control | null>(null);
     const [currentDirectionIndex, setCurrentDirectionIndex] = useState(0);
     const directionsRef = useRef<L.Routing.IInstruction[] | null>(null);
+
+    const speakNextDirection = useCallback(() => {
+        if (directionsRef.current && currentDirectionIndex < directionsRef.current.length) {
+            const direction = directionsRef.current[currentDirectionIndex];
+            const utterance = new SpeechSynthesisUtterance(direction.text);
+            window.speechSynthesis.speak(utterance);
+            setCurrentDirectionIndex((prevIndex) => prevIndex + 1);
+        }
+    }, [currentDirectionIndex]);
 
     useEffect(() => {
         if (!mapRef.current || mapInstanceRef.current) return;
@@ -63,9 +72,8 @@ const UserGPSNavigation: React.FC<UserGPSNavigationProps> = ({
         }
 
         return () => {
-            const currentMapRef = mapRef.current;
-            if (currentMapRef) {
-                observer.unobserve(currentMapRef);
+            if (mapRef.current) {
+                observer.unobserve(mapRef.current);
             }
         };
 
@@ -81,7 +89,7 @@ const UserGPSNavigation: React.FC<UserGPSNavigationProps> = ({
                 .bindPopup(`You are here!<br>Latitude: ${userLatitude}<br>Longitude: ${userLongitude}`)
                 .openPopup();
 
-            if (userRole?.includes('User') && responderLatitude && responderLongitude) {
+            if ((userRole?.includes('User')) && responderLatitude && responderLongitude) {
                 const responderLocation: LatLngTuple = [parseFloat(responderLatitude), parseFloat(responderLongitude)];
                 addRoute(userLocation, responderLocation);
             } else if ((userRole?.includes("Admin") || userRole?.includes("Employee")) && emergencyLatitude && emergencyLongitude) {
@@ -93,7 +101,11 @@ const UserGPSNavigation: React.FC<UserGPSNavigationProps> = ({
         function addRoute(start: LatLngTuple, end: LatLngTuple) {
             if (mapInstanceRef.current) {
                 if (routingControlRef.current) {
-                    mapInstanceRef.current.removeControl(routingControlRef.current);
+                    try {
+                        mapInstanceRef.current.removeControl(routingControlRef.current);
+                    } catch (error) {
+                        console.error('Error removing control:', error);
+                    }
                     routingControlRef.current = null;
                 }
 
@@ -107,7 +119,8 @@ const UserGPSNavigation: React.FC<UserGPSNavigationProps> = ({
                         styles: [{ color: 'blue', opacity: 0.6, weight: 4 }],
                         extendToWaypoints: true,
                         missingRouteTolerance: 10
-                    }
+                    },
+                    serviceUrl: 'https://router.project-osrm.org/route/v1'
                 }).addTo(mapInstanceRef.current);
 
                 routingControlRef.current.on('routesfound', (e) => {
@@ -121,25 +134,20 @@ const UserGPSNavigation: React.FC<UserGPSNavigationProps> = ({
 
         return () => {
             if (mapInstanceRef.current && routingControlRef.current) {
-                mapInstanceRef.current.removeControl(routingControlRef.current);
+                try {
+                    mapInstanceRef.current.removeControl(routingControlRef.current);
+                } catch (error) {
+                    console.error('Error removing control on cleanup:', error);
+                }
                 routingControlRef.current = null;
             }
         };
 
-    }, [userRole, userLatitude, userLongitude, emergencyLatitude, emergencyLongitude, responderLatitude, responderLongitude]);
-
-    const speakNextDirection = () => {
-        if (directionsRef.current && currentDirectionIndex < directionsRef.current.length) {
-            const direction = directionsRef.current[currentDirectionIndex];
-            const utterance = new SpeechSynthesisUtterance(direction.text);
-            window.speechSynthesis.speak(utterance);
-            setCurrentDirectionIndex((prevIndex) => prevIndex + 1);
-        }
-    };
+    }, [userRole, userLatitude, userLongitude, emergencyLatitude, emergencyLongitude, responderLatitude, responderLongitude, speakNextDirection]);
 
     return (
         <div>
-            <div id="map" ref={mapRef} style={{ height: '400px', width: '100%' }}></div>
+            <div id="map" ref={mapRef} style={{ height: '400px', width: '95%', margin: "auto" }}></div>
         </div>
     );
 };
