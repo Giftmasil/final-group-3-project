@@ -1,0 +1,7 @@
+.emergency-container {
+    border: 1px solid #ccc;
+}
+
+.modal-header {
+    cursor: pointer;
+}

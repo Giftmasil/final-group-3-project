@@ -1,0 +1,136 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.homecontainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    text-align: center;
+    min-height: calc(100vh - 50px); /* Adjusted to fit within viewport minus header height */
+    margin: 50px; /* Ensure space around the container */
+}
+
+.homecontainer p {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+#emergency {
+    width: 100%;
+    max-width: 400px;
+    height: 50px;
+    background: #d32f2f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-bottom: 2.5rem;
+}
+
+#emergency:hover {
+    background: #c12727;
+}
+
+.middle-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 2rem;
+}
+
+.placeholder {
+    width: 100%;
+    max-width: 400px; /* Adjust max-width based on content and screen size */
+    border-radius: 10px;
+    object-fit: cover;
+    margin-bottom: 2rem;
+}
+
+.extra-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 2rem;
+}
+
+.extra-info p {
+    font-size: 1rem;
+    color: #333;
+    margin: 0.5rem 0;
+}
+
+.chatbot {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px; /* Adjust as needed */
+    margin-top: 2rem;
+}
+
+.ai-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+    margin-right: 1rem;
+}
+
+.chatbot p {
+    font-size: 1rem;
+    color: #333;
+    margin: 0;
+}
+
+@media (min-width: 768px) {
+    .homecontainer p {
+        font-size: 2rem;
+    }
+
+    .middle-section {
+        flex-direction: row;
+    }
+
+    .placeholder {
+        max-width: 500px;
+    }
+
+    .ai-icon {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .homecontainer p {
+        font-size: 2.5rem;
+    }
+
+    .chatbot {
+        padding: 2rem;
+    }
+
+    .placeholder {
+        max-width: 600px;
+    }
+
+    .ai-icon {
+        width: 100px;
+        height: 100px;
+    }
+}

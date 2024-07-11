@@ -1,0 +1,16 @@
+.record-container {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .record-container h3 {
+    margin-bottom: 5px;
+  }
+  
+  .record-container p {
+    margin: 5px 0;
+  }
+  
