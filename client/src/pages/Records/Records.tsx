@@ -16,7 +16,9 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  Heading,
 } from "@chakra-ui/react";
+import Footer from "../../components/footer/Footer";
 
 const Records: React.FC = () => {
   const [emergencies, setEmergencies] = useState<Emergency[]>([]);
@@ -49,12 +51,13 @@ const Records: React.FC = () => {
   return (
     <div>
       <TopBar />
-      <h2>Records</h2>
+      <Heading as="h2" mt={4} textAlign="center">Records</Heading>
       <ul className="all-cards-container">
         {emergencies.map((emergency) => (
           <RecordItemComponent key={emergency._id} emergency={emergency} />
         ))}
       </ul>
+      <Footer />
     </div>
   );
 };

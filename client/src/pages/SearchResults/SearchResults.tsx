@@ -4,10 +4,16 @@ import { useLocation } from 'react-router-dom';
 import { User } from '../../models/User';
 import TopBar from '../../components/topbar/TopBar';
 import "./SearchResults.css"
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/ReduxStore';
+import { Heading } from '@chakra-ui/react';
+import Footer from '../../components/footer/Footer';
 
 const SearchResults: React.FC = () => {
     const [results, setResults] = useState<User[]>([]);
     const location = useLocation();
+
+    const { user } = useSelector((state: RootState) => state.user);
 
     const query = new URLSearchParams(location.search).get('query');
 
@@ -26,31 +32,43 @@ const SearchResults: React.FC = () => {
         fetchSearchResults();
     }, [query]);
 
+    if (user?.roles.includes("User")) {
+        return (
+            <div className="search-results">
+                <TopBar />
+               <h1>you are not allowed to search other users</h1>
+               <Footer />
+            </div>
+        )
+    }
+
     return (
         <div className="search-results">
             <TopBar />
-            <h1 className='search-result-header'>Search Results</h1>
-            <h2 className='search-result-length'>{results.length} results found</h2>
+            <Heading as="h2" mt={4} textAlign="center" style={{ color: "green" }}>{results.length} Results Found</Heading>
+            <div className="all-cards-container">
             {results.length ? (
-                <ul>
+                <ul className='overall-card-container'>
                     {results.map((user) => (
-                        <li className='search-result-list' key={user._id}>
-                            <p className='search-result-content'>Username: {user.username}</p>
-                            <p className='search-result-content'>Email: {user.email}</p>
-                            <p className='search-result-content'>Phone Number: {user.phoneNumber}</p>
-                            <p className='search-result-content'>Address: {user.address}</p>
-                            <p className='search-result-content'>Medical History: {user.medicalHistory}</p>
-                            <p className='search-result-content'>Current Medication: {user.currentMedication}</p>
-                            <p className='search-result-content'>Vaccination: {user.vaccination}</p>
-                            <p className='search-result-content'>Emergency Contact Name: {user.emergencyContactName}</p>
-                            <p className='search-result-content'>Relationship: {user.relationship}</p>
-                            <p className='search-result-content'>Emergency Contact Number: {user.emergencyContactNumber}</p>
+                        <li className='search-result-list individual-card' key={user._id}>
+                            <p className='search-result-content'><strong>Username:</strong> {user.username || "None"}</p>
+                            <p className='search-result-content'><strong>Email:</strong> {user.email || "None"}</p>
+                            <p className='search-result-content'><strong>Phone Number: </strong>{user.phoneNumber || "None"}</p>
+                            <p className='search-result-content'><strong>Address: </strong>{user.address || "None"}</p>
+                            <p className='search-result-content'><strong>Medical History: </strong>{user.medicalHistory || "None"}</p>
+                            <p className='search-result-content'><strong>Current Medication: </strong>{user.currentMedication || "None"}</p>
+                            <p className='search-result-content'><strong>Vaccination: </strong>{user.vaccination || "None"}</p>
+                            <p className='search-result-content'><strong>Emergency Contact Name: </strong>{user.emergencyContactName || "None"}</p>
+                            <p className='search-result-content'><strong>Relationship: </strong>{user.relationship || "None"}</p>
+                            <p className='search-result-content'><strong>Emergency Contact Number: </strong>{user.emergencyContactNumber || "None"}</p>
                         </li>
                     ))}
                 </ul>
             ) : (
-                <p>No results found</p>
+                <h1 style={{fontSize: "3rem", color: "red", textAlign: "center"}}>No results found</h1>
             )}
+            </div>
+            <Footer />
         </div>
     );
 };

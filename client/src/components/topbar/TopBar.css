@@ -1,4 +1,4 @@
-nav{
+.topbar{
     height: 80px;
     background-color: white;
     position: sticky;
@@ -12,7 +12,7 @@ nav{
     padding: 0 1.5rem;
 }
 
-nav h1{
+.topbar-header{
     padding: 0;
     margin: 0;
     font-size: 2rem;
@@ -25,7 +25,7 @@ nav h1{
    
 }
 
-nav ul {
+.topbar-unordered-list {
     padding: 0;
     margin: 0;
     display: flex;
@@ -34,12 +34,12 @@ nav ul {
 
 }
 
-nav li {
+.topbar-list-item {
     list-style-type: none;
     margin-left: 1rem;
 }
 
-nav li a {
+.topbar-list-item a {
     text-decoration: none;
     color: #333; 
     font-size: 1rem;
@@ -50,18 +50,18 @@ nav li a {
     transition: color 0.3s ease;
 }
 
-nav li a:hover, nav li button:hover {
+.topbar-list-item a:hover, .topbar-list-item-button:hover {
     color: #65558F;
 }
 
-#logo  {
+.company-logo  {
     width: 50px;
     height: 50px;
     border-radius: 50px;
     margin-right: 20px;
 }
 
-#logo, #profilepic {
+.company-logo, .profile-pic {
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -79,4 +79,43 @@ nav li a:hover, nav li button:hover {
   
   .searchInput:focus {
     outline: none;
+  }
+
+  @media screen and (min-width: 200px) {
+    .topbar-list-item {
+        display: none;
+    }
+    .topbar-header{
+        font-size: 1rem;
+    }
+    .topbar-list-item-button {
+        font-size: .75rem;
+    }
+  }
+
+  @media screen and (min-width: 460px) {
+    .topbar-list-item {
+        display: none;
+    }
+    .topbar-header{
+        font-size: 1.4rem;
+    }
+    .topbar-list-item-button {
+        font-size: 1rem;
+    }
+  }
+
+  @media screen and (min-width: 767px) {
+    .topbar-list-item {
+        display: block;
+    }
+    .topbar-header {
+        font-size: 1.7rem;
+    }
+  }
+
+  @media screen and (min-width: 1000px) {
+    .topbar-header {
+        font-size: 2.1rem;
+    }
   }

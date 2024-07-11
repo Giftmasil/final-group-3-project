@@ -29,6 +29,7 @@ const UserGPSNavigation: React.FC<UserGPSNavigationProps> = ({
     const routingControlRef = useRef<L.Routing.Control | null>(null);
     const [currentDirectionIndex, setCurrentDirectionIndex] = useState(0);
     const directionsRef = useRef<L.Routing.IInstruction[] | null>(null);
+    const initialRender = useRef(true);
 
     const speakNextDirection = useCallback(() => {
         if (directionsRef.current && currentDirectionIndex < directionsRef.current.length) {
@@ -80,6 +81,11 @@ const UserGPSNavigation: React.FC<UserGPSNavigationProps> = ({
     }, []);
 
     useEffect(() => {
+        if (initialRender.current) {
+            initialRender.current = false;
+            return;
+        }
+
         const userLocation: LatLngTuple = [parseFloat(userLatitude), parseFloat(userLongitude)];
 
         if (mapInstanceRef.current) {

@@ -16,8 +16,12 @@ import {
   useDisclosure,
   Box,
   Button,
+  Heading,
+  Stack,
+  Text
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import Footer from "../../components/footer/Footer";
 
 const Alerts: React.FC = () => {
   const [emergencies, setEmergencies] = useState<Emergency[]>([]);
@@ -50,8 +54,7 @@ const Alerts: React.FC = () => {
   return (
     <div>
       <TopBar />
-      <h2>Current Emergencies</h2>
-      <h2>You have {emergencies.length} total emergencies</h2>
+      <Heading as="h2" mt={4} textAlign="center">Current Emergencies: <span style={{ color: "red" }}>{emergencies.length}</span></Heading>
       {emergencies.length === 0 ? (
         <h1>No emergencies yet</h1>
       ) : (
@@ -65,7 +68,7 @@ const Alerts: React.FC = () => {
         ))}
       </ul>
       )}
-      
+      <Footer />
     </div>
   );
 };
@@ -136,6 +139,11 @@ const EmergencyItemComponent: React.FC<EmergencyItemProps> = ({ emergency, setRe
   };
 
   const handleModalHeaderClick = (emergencyId: string) => {
+    if (user?.roles.includes("User")) {
+      navigate(`/alerts`);
+      onClose()
+      return
+    }
     navigate(`/emergency/${emergencyId}`);
     onClose();
   };
@@ -166,50 +174,43 @@ const EmergencyItemComponent: React.FC<EmergencyItemProps> = ({ emergency, setRe
             </ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <p>
-                <span onClick={handleUserClick} style={{ fontWeight: "bolder", cursor: "pointer", color: "" }}>User ID</span>:{" "}
-                {emergency.user}
-              </p>
-              <p>
-                <span style={{ fontWeight: "bolder" }}>Status</span>:{" "}
-                {emergency.status}
-              </p>
-              <h2>
-                <span style={{ fontWeight: "bolder", fontSize: "2rem" }}>
+              <Stack spacing={3}>
+                <Text>
+                  <span onClick={handleUserClick} className="userId">User ID:</span> {emergency.user}
+                </Text>
+                <Text>
+                  <span style={{ fontWeight: "bolder" }}>Status:</span> {emergency.status}
+                </Text>
+                <Text fontWeight="bolder" fontSize="2xl">
                   {emergency.title}
-                </span>
-              </h2>
-              <p>
-                <span style={{ fontWeight: "bolder" }}>Location:</span>{" "}
-                {emergency.place}
-              </p>
-              <p>
-                <span style={{ fontWeight: "bolder" }}>Condition:</span>{" "}
-                {emergency.condition}
-              </p>
-              <p>
-                <span style={{ fontWeight: "bolder" }}>Description:</span>{" "}
-                {emergency.description}
-              </p>
-              <p>
-                <span style={{ fontWeight: "bolder" }}>Responder:</span>{" "}
-                {emergency.responder}
-              </p>
-              {emergency.createdAt && (
-                <p>
-                  <span style={{ fontWeight: "bolder" }}>Time requested:</span>{" "}
-                  {new Date(emergency.createdAt).toLocaleString()}
-                </p>
-              )}
+                </Text>
+                <Text>
+                  <span style={{ fontWeight: "bolder" }}>Location:</span> {emergency.place}
+                </Text>
+                <Text>
+                  <span style={{ fontWeight: "bolder" }}>Condition:</span> {emergency.condition}
+                </Text>
+                <Text>
+                  <span style={{ fontWeight: "bolder" }}>Description:</span> {emergency.description}
+                </Text>
+                <Text>
+                  <span style={{ fontWeight: "bolder" }}>Responder:</span> {emergency.responder}
+                </Text>
+                {emergency.createdAt && (
+                  <Text>
+                    <span style={{ fontWeight: "bolder" }}>Time requested:</span> {new Date(emergency.createdAt).toLocaleString()}
+                  </Text>
+                )}
+              </Stack>
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme="blue" mr={3} onClick={onClose}>
+              <Button variant="ghost" mr={3} onClick={onClose}>
                 Close
               </Button>
               {(emergency.status === "Delivered" || emergency.status === "Pending") &&
                 (user?.roles.includes("Admin") || user?.roles.includes("Employee")) && (
                   <Button
-                    variant="ghost"
+                    colorScheme="green"
                     onClick={emergency.status === "Delivered" ? handleAccept : handleDone}
                   >
                     {emergency.status === "Delivered" ? "Accept" : "Done"}

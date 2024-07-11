@@ -38,6 +38,8 @@ li {
   
   .modal-header {
     cursor: pointer;
+    text-decoration: underline;
+    color: blue;
   }
 
   .status-delivered {
@@ -61,4 +63,28 @@ li {
     width: 10%;
     display: flex;
     justify-self: flex-end;
+  }
+
+  .current-emergency-header {
+    font-weight: bolder;
+    font-size: 2rem;
+    text-align: center;
+    color: #333;
+    background-color: rgb(201, 201, 201);
+    padding: .35rem;
+  }
+
+.no-emergencies-page {
+    color: red;
+    font-weight: bolder;
+    font-size: 2rem;
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .userId {
+    text-decoration: underline;
+    color: blue;
+    cursor: pointer;
+    font-weight: bolder;
   }

@@ -26,15 +26,15 @@ const TopBar: React.FC  = () => {
     return (
         <nav className="topbar">
             <div className="title">
-                <img className="company-logo" id="logo" src="https://media.istockphoto.com/id/1437816897/photo/business-woman-manager-or-human-resources-portrait-for-career-success-company-we-are-hiring.jpg?s=612x612&w=is&k=20&c=tw9TuTigzhSlLA_b1Avy0X6GNF9ZFVvgTHIZ9i68Q0I=" alt="company logo" width={30} height={30} />
+                <img className="company-logo" id="logo" src="https://plus.unsplash.com/premium_vector-1712873279566-379ba42df159?q=80&w=580&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="company logo" width={30} height={30} />
                 <h1 className="topbar-header">Q-Response</h1>
             </div>
             <ul className="topbar-unordered-list">
                 <li className="topbar-list-item"><a href="/">Home</a></li>
                 <li className="topbar-list-item"><a href="/alerts">Alerts</a></li>
                 <li className="topbar-list-item"><a href="/records">Records</a></li>
-                <li className="topbar-list-item"><a href="/settings"><img id="profilepic" src={loggedInUser?.profileUrl || "https://media.istockphoto.com/id/1437816897/photo/business-woman-manager-or-human-resources-portrait-for-career-success-company-we-are-hiring.jpg?s=612x612&w=is&k=20&c=tw9TuTigzhSlLA_b1Avy0X6GNF9ZFVvgTHIZ9i68Q0I="} width={30} height={30} /></a></li>
-                <form className="search-form" onSubmit={handleSearch}>
+                <li className="topbar-list-item"><a href="/settings"><img id="profilepic" className="profile-pic" src={loggedInUser?.profileUrl || "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=1024x1024&w=is&k=20&c=oGqYHhfkz_ifeE6-dID6aM7bLz38C6vQTy1YcbgZfx8="} width={30} height={30} /></a></li>
+                {(loggedInUser?.roles.includes("Admin") || loggedInUser?.roles.includes("Employee")) && <form className="search-form" onSubmit={handleSearch}>
                     <input
                         type="text"
                         className="searchInput"
@@ -42,7 +42,7 @@ const TopBar: React.FC  = () => {
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
                     <button type="submit"><i className="fa-solid fa-magnifying-glass"></i></button>
-                </form>
+                </form>}
                 <li className="topbar-list-item-button"><button onClick={handleLogout}>Logout</button></li>
             </ul>
         </nav>

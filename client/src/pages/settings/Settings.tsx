@@ -6,13 +6,29 @@ import { AppDispatch, RootState } from "../../redux/ReduxStore";
 import { updateUser } from "../../redux/slices/UserSlice";
 import { User } from "../../models/User";
 import TopBar from "../../components/topbar/TopBar";
+import {
+  Box,
+  Button,
+  Flex,
+  FormControl,
+  FormLabel,
+  Input,
+  Stack,
+  Textarea,
+  useToast,
+  Heading,
+  Spinner,
+  Center,
+  Image
+} from "@chakra-ui/react";
+import Footer from "../../components/footer/Footer";
 
 const Settings: React.FC = () => {
-  const { user, loading, success, error } = useSelector((state: RootState) => state.user);
+  const { user, loading, error } = useSelector((state: RootState) => state.user);
   const [updatedUser, setUpdatedUser] = useState<User | null>(null);
   const dispatch: AppDispatch = useDispatch();
+  const toast = useToast()
 
-  // Initialize updatedUser with the current user data
   useEffect(() => {
     if (user) {
       setUpdatedUser(user);
@@ -31,150 +47,199 @@ const Settings: React.FC = () => {
   // Handle form submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!updatedUser && error) {
+      toast({
+        title: "Error",
+        description: "User not found",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "bottom"
+      })
+    }
     if (updatedUser) {
       dispatch(updateUser(updatedUser));
+      toast({
+        title: "Success",
+        description: "Profile updated successfully",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        position: "bottom"
+      })
     }
   };
 
   if (!user) {
-    return <div>Loading...</div>;
+    return (
+    <Spinner
+    thickness='4px'
+    speed='0.65s'
+    emptyColor='gray.200'
+    color='blue.500'
+    size='xxl'
+    />)
   }
 
   console.log(user);
   
 
   return (
-    <div>
+    <Box p={4}>
       <TopBar />
-      <h2>Edit Profile</h2>
-      <img src={user.profileUrl} alt="Profile" title="profile" width={100} height={100} />
+     
+      <Flex justify="center">
+        <Box width={{base:"100%", md:"80%", lg:"60%"}} p={8} borderWidth={1} borderRadius= "lg" boxShadow="large">
+        <Center><Image src={user.profileUrl || "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=1024x1024&w=is&k=20&c=oGqYHhfkz_ifeE6-dID6aM7bLz38C6vQTy1YcbgZfx8="} alt="Profile" title="profile" boxSize="150px" objectFit= "cover" borderRadius= "full" style={{display: "block", margin: "0 auto"}} />
+        </Center>
+        <Heading as='h2' size='lg' mb={6} textAlign="center">Edit Profile</Heading>
       <form onSubmit={handleSubmit}>
-        <label>
-          ProfileUrl:
-          <input
+        <Stack spacing={6}>
+          <FormControl>
+        <FormLabel>ProfileUrl:</FormLabel>
+          <Input
             type="text"
             name="profileUrl"
             defaultValue={user.profileUrl}
-            placeholder="enter image usrl here"
+            placeholder="enter image url here"
             onChange={handleInputChange}
           />
-        </label>
-        <label>
-          Username:
-          <input
+          </FormControl>
+
+          <FormControl>
+        <FormLabel> Username:  </FormLabel>
+          <Input
             type="text"
             name="username"
             placeholder="John Doe"
             defaultValue={user.username}
             onChange={handleInputChange}
           />
-        </label>
-        <label>
-          Email:
-          <input
+          </FormControl>
+
+          <FormControl>
+        <FormLabel>Email:</FormLabel>
+          <Input
             type="email"
             name="email"
             defaultValue={user.email}
             placeholder="example@gmail.com"
             onChange={handleInputChange}
           />
-        </label>
-        <label>
-          Phone Number:
-          <input
+        </FormControl>
+        <FormControl>
+        <FormLabel>Phone Number: </FormLabel>
+          <Input
             type="text"
             name="phoneNumber"
             placeholder="555-555-5555"
             defaultValue={user.phoneNumber.toString()}
             onChange={handleInputChange}
           />
-        </label>
-        <label>
-          Age:
-          <input
+          </FormControl>
+
+        <FormControl>
+        <FormLabel>Age:</FormLabel>
+          <Input
             type="number"
             name="age"
             placeholder="20"
             defaultValue={user.age?.toString()}
             onChange={handleInputChange}
           />
-        </label>
-        <label>
-          Address:
-          <input
+          </FormControl>
+        
+       <FormControl> 
+        <FormLabel> Address:</FormLabel>
+          <Input
             type="text"
             name="address"
             placeholder="5120-02000"
             defaultValue={user.address}
             onChange={handleInputChange}
           />
-        </label>
-        <label>
-          Medical History:
-          <textarea
+          </FormControl>
+          
+       <FormControl> <FormLabel>
+          Medical History:</FormLabel>
+          <Textarea
             name="medicalHistory"
             defaultValue={user.medicalHistory}
             placeholder="hypertention, asthma"
             onChange={handleInputChange}
           />
-        </label>
-        <label>
-          Current Medication:
-          <input
+          </FormControl>
+    
+       <FormControl> <FormLabel>
+          Current Medication:</FormLabel>
+          <Input
             type="text"
             name="currentMedication"
             placeholder="morphine"
             defaultValue={user.currentMedication}
             onChange={handleInputChange}
           />
-        </label>
-        <label>
-          Vaccination:
-          <input
+          </FormControl>
+      
+       <FormControl> <FormLabel>
+          Vaccination:</FormLabel>
+          <Input
             type="text"
             name="vaccination"
             defaultValue={user.vaccination}
             placeholder="BCG"
             onChange={handleInputChange}
           />
-        </label>
-        <label>
-          Emergency Contact Name:
-          <input
+          </FormControl>
+        
+       <FormControl>
+         <FormLabel>Emergency Contact Name:</FormLabel>
+          <Input
             type="text"
             name="emergencyContactName"
             defaultValue={user.emergencyContactName}
             placeholder="John Doe"
             onChange={handleInputChange}
           />
-        </label>
-        <label>
-          Relationship:
-          <input
+          </FormControl>
+        
+       <FormControl>
+         <FormLabel> Relationship:</FormLabel>
+          <Input
             type="text"
             name="relationship"
             defaultValue={user.relationship}
             placeholder="brother"
             onChange={handleInputChange}
           />
-        </label>
-        <label>
-          Emergency Contact Number:
-          <input
+          </FormControl>
+
+        
+       <FormControl>
+        <FormLabel>Emergency Contact Number:</FormLabel>
+          <Input
             type="text"
             name="emergencyContactNumber"
             defaultValue={user.emergencyContactNumber?.toString()}
             placeholder="555-555-5555"
             onChange={handleInputChange}
           />
-        </label>
-        <button type="submit">Save Changes</button>
+          </FormControl>
+        <Button 
+        type="submit" 
+        variant="solid" 
+        isLoading={loading}
+        loadingText='Saving'
+        colorScheme='teal'
+        spinnerPlacement='start'>Save Changes</Button>
+        </Stack>
       </form>
-      {loading && <p>Updating profile...</p>}
-      {error && <p>There was an error. Please try again.</p>}
-      {success && <p>Profile updated successfully!</p>}
-    </div>
+        </Box>
+      </Flex>
+      <Footer />
+    </Box >
   );
 };
 
 export default Settings;
+

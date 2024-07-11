@@ -10,7 +10,15 @@ import TopBar from "../../components/topbar/TopBar";
 import { Emergency } from "../../models/Emergency";
 import { User } from "../../models/User";
 import { RootState } from '../../redux/ReduxStore';
-import { defineStyle, defineStyleConfig, Spinner } from '@chakra-ui/react'
+import { 
+    Spinner, 
+    Box,
+    Heading,
+    Text,
+    Stack,
+} from '@chakra-ui/react'
+import Footer from "../../components/footer/Footer";
+
 
 const EmergencyDetailsPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -75,7 +83,7 @@ const EmergencyDetailsPage: React.FC = () => {
         speed='0.65s'
         emptyColor='gray.200'
         color='blue.500'
-        size='xxl'
+        size='xl'
         />
     )
     
@@ -84,9 +92,10 @@ const EmergencyDetailsPage: React.FC = () => {
     return (
         <div>
             <TopBar />
-            <h1 className="emergency-details-header">Emergency Details</h1>
+            <Box  maxW="1000px" mx="auto" mt={4}>
+            <Heading as="h2" textAlign="center"     mt = {1} mb={4}className="emergency-details-header">Emergency Details</Heading>
             {currentEmergency && currentUserLocation && (
-                <div>
+                <Box className="emergency-page-detals-container" borderWidth={1} borderRadius="lg" p={4} mb={4} boxShadow="lg">
                     <UserGPSNavigation
                         userRole={currentUser?.roles}
                         userLatitude={currentUserLocation.latitude.toString()}
@@ -96,22 +105,28 @@ const EmergencyDetailsPage: React.FC = () => {
                         responderLatitude={currentEmergency?.responderLatitude?.toString()}
                         responderLongitude={currentEmergency?.responderLongitude?.toString()}
                     />
-                    <p className="emergency-details-info"><strong>Type of Emergency:</strong> {currentEmergency.title}</p>
-                    <p className="emergency-details-info"><strong>Condition of the People:</strong> {currentEmergency.condition}</p>
-                    <p className="emergency-details-info"><strong>Description:</strong> {currentEmergency.description}</p>
-                    <p className="emergency-details-info"><strong>Location:</strong> {currentEmergency.place}</p>
-                    <p className="emergency-details-info"><strong>Latitude:</strong> {currentEmergency.latitude}</p>
-                    <p className="emergency-details-info"><strong>Longitude:</strong> {currentEmergency.longitude}</p>
-                    <p className="emergency-details-info"><strong>Status:</strong> {currentEmergency.status}</p>
-                </div>
+                    <Stack spacing={4} align="left" p={4}>
+                    <Text className="emergency-details-info"><strong>Type of Emergency:</strong> {currentEmergency.title}</Text>
+                    <Text className="emergency-details-info"><strong>Condition of the People:</strong> {currentEmergency.condition}</Text>
+                    <Text className="emergency-details-info"><strong>Description:</strong> {currentEmergency.description}</Text>
+                    <Text className="emergency-details-info"><strong>Location:</strong> {currentEmergency.place}</Text>
+                    <Text className="emergency-details-info"><strong>Latitude:</strong> {currentEmergency.latitude}</Text>
+                    <Text className="emergency-details-info"><strong>Longitude:</strong> {currentEmergency.longitude}</Text>
+                    <Text className="emergency-details-info"><strong>Status:</strong> {currentEmergency.status}</Text>
+                    </Stack>
+                </Box>
             )}
             {respondent && (
-                <div>
-                    <p className="responder-details-info"><strong>Responder:</strong> {respondent.username}</p>
-                    <p className="responder-details-info"><strong>Responder Email:</strong> {respondent.email}</p>
-                    <p className="responder-details-info"><strong>Responder Phone:</strong> {respondent.phoneNumber}</p>
-                </div>
+                <Box className="emergency-page-detals-container" borderWidth={1} borderRadius="large" p={4} boxShadow="lg" >
+                    <Stack spacing={4}>
+                    <Text className="responder-details-info"><strong>Responder:</strong> {respondent.username}</Text>
+                    <Text className="responder-details-info"><strong>Responder Email:</strong> {respondent.email}</Text>
+                    <Text className="responder-details-info"><strong>Responder Phone:</strong> {respondent.phoneNumber}</Text>
+                    </Stack>
+                </Box>
             )}
+            </Box>
+            <Footer />
         </div>
     );
 };
