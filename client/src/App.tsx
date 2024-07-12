@@ -1,37 +1,37 @@
-import './App.css'
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
-import Home from './pages/HomePage/HomePage'
-import Login from './pages/login/Login'
-import { AppDispatch, RootState } from './redux/ReduxStore'
-import { useDispatch, useSelector } from 'react-redux'
-import { useEffect } from 'react'
-import { fetchUser } from './redux/slices/UserSlice'
-import Register from './pages/register/Register'
-import Emergency from './pages/emergency/EmergencyForm'
-import EmergencyDetailsPage from './pages/EmergencyDetailsPage/EmergencyDetailsPage'
-import Settings from './pages/settings/Settings'
-import Alerts from './pages/Alerts/Alerts'
-import Records from './pages/Records/Records'
-import SearchResults from './pages/SearchResults/SearchResults'
-
+import './App.css';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import Home from './pages/HomePage/HomePage';
+import Login from './pages/login/Login';
+import { AppDispatch, RootState } from './redux/ReduxStore';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { fetchUser } from './redux/slices/UserSlice';
+import Register from './pages/register/Register';
+import Emergency from './pages/emergency/EmergencyForm';
+import EmergencyDetailsPage from './pages/EmergencyDetailsPage/EmergencyDetailsPage';
+import Settings from './pages/settings/Settings';
+import Alerts from './pages/Alerts/Alerts';
+import Records from './pages/Records/Records';
+import SearchResults from './pages/SearchResults/SearchResults';
 
 function App() {
-  const {success} = useSelector((state:RootState)=>state.authentication)
-  const loggedInUser = useSelector((state: RootState) => state.user.user)
+  const { success } = useSelector((state: RootState) => state.authentication);
+  const loggedInUser = useSelector((state: RootState) => state.user.user);
   
-  const dispatch: AppDispatch = useDispatch()
+  const dispatch: AppDispatch = useDispatch();
+  const [userFetched, setUserFetched] = useState(false);
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId")
+    const userId = localStorage.getItem("userId");
 
-    if (userId && success) {
-      dispatch(fetchUser({ userId }))
+    if (userId && success && !userFetched) {
+      dispatch(fetchUser({ userId })).then(() => setUserFetched(true));
     }
 
-    if (userId && !loggedInUser) {
-      dispatch(fetchUser({ userId }))
+    if (userId && !loggedInUser && !userFetched) {
+      dispatch(fetchUser({ userId })).then(() => setUserFetched(true));
     }
-  }, [loggedInUser, dispatch, success])
+  }, [loggedInUser, dispatch, success, userFetched]);
 
   return (
     <BrowserRouter>
@@ -48,7 +48,7 @@ function App() {
         <Route path="*" element={<Home />} />
       </Routes>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;

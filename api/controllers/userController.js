@@ -110,7 +110,7 @@ const createNewUser = async (req, res) => {
 // @route PATCH /users
 // @access Private
 const updateUser = async (req, res) => {
-    const { _id, username, email, password, roles, phoneNumber, age, address, medicalHistory, currentMedication, vaccination, emergencyContactName, relationship, emergencyContactNumber,profileUrl } = req.body;
+    const { _id, username, email, password, roles, phoneNumber, age, address, medicalHistory, currentMedication, vaccination, emergencyContactName, relationship, emergencyContactNumber, profileUrl } = req.body;
 
     // Confirm data 
     if (!_id || !username || !Array.isArray(roles) || !roles.length || !email || !phoneNumber) {
@@ -126,7 +126,6 @@ const updateUser = async (req, res) => {
 
     // Check for duplicate 
     const duplicate = await User.findOne({ email }).collation({ locale: 'en', strength: 2 }).lean().exec();
-
     // Allow updates to the original user 
     if (duplicate && duplicate?._id.toString() !== _id) {
         return res.status(409).json({ message: 'Duplicate email' });
@@ -173,15 +172,18 @@ const updateUser = async (req, res) => {
         user.profileUrl = profileUrl;
     }
 
-    if (password) {
-        // Hash password 
+    if (password && password.trim() !== "") {
+        console.log("Hashing password:", password);
         user.password = await bcrypt.hash(password, 10); // salt rounds 
+        console.log("Hashed password:", user.password);
     }
 
-    const updatedUser = await user.save();
+    const updatedUser = await User.findByIdAndUpdate(_id, user, { new: true }).exec();
 
     res.json({ message: `${updatedUser.username} updated`, user: updatedUser });
 }
+
+
 
 
 // @desc Delete a user

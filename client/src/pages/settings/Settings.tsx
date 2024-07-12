@@ -24,8 +24,9 @@ import {
 import Footer from "../../components/footer/Footer";
 
 const Settings: React.FC = () => {
-  const { user, loading, error } = useSelector((state: RootState) => state.user);
+  const { user } = useSelector((state: RootState) => state.user);
   const [updatedUser, setUpdatedUser] = useState<User | null>(null);
+  const [password, setPassword] = useState<string>("");
   const dispatch: AppDispatch = useDispatch();
   const toast = useToast()
 
@@ -34,6 +35,11 @@ const Settings: React.FC = () => {
       setUpdatedUser(user);
     }
   }, [user]);
+
+  // Handle password change
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  }
 
   // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -47,7 +53,7 @@ const Settings: React.FC = () => {
   // Handle form submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!updatedUser && error) {
+    if (!updatedUser) {
       toast({
         title: "Error",
         description: "User not found",
@@ -56,18 +62,19 @@ const Settings: React.FC = () => {
         isClosable: true,
         position: "bottom"
       })
+      return;
     }
-    if (updatedUser) {
-      dispatch(updateUser(updatedUser));
-      toast({
-        title: "Success",
-        description: "Profile updated successfully",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-        position: "bottom"
-      })
-    }
+
+    const userData = { ...updatedUser, password: password ? password : undefined };
+    dispatch(updateUser(userData));
+    toast({
+      title: "Success",
+      description: "Profile updated successfully",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+      position: "bottom"
+    })
   };
 
   if (!user) {
@@ -82,10 +89,9 @@ const Settings: React.FC = () => {
   }
 
   console.log(user);
-  
 
   return (
-    <Box p={4}>
+    <Box >
       <TopBar />
      
       <Flex justify="center">
@@ -117,7 +123,7 @@ const Settings: React.FC = () => {
           />
           </FormControl>
 
-          <FormControl>
+        <FormControl>
         <FormLabel>Email:</FormLabel>
           <Input
             type="email"
@@ -125,6 +131,15 @@ const Settings: React.FC = () => {
             defaultValue={user.email}
             placeholder="example@gmail.com"
             onChange={handleInputChange}
+          />
+        </FormControl>
+        <FormControl>
+        <FormLabel>Password:</FormLabel>
+          <Input
+            type="text"
+            name="password"
+            placeholder="your password"
+            onChange={handlePasswordChange}
           />
         </FormControl>
         <FormControl>
@@ -186,60 +201,56 @@ const Settings: React.FC = () => {
           <Input
             type="text"
             name="vaccination"
+            placeholder="polio, tetanus"
             defaultValue={user.vaccination}
-            placeholder="BCG"
             onChange={handleInputChange}
           />
           </FormControl>
-        
-       <FormControl>
-         <FormLabel>Emergency Contact Name:</FormLabel>
+      
+       <FormControl> <FormLabel>
+          Emergency Contact Name:</FormLabel>
           <Input
             type="text"
             name="emergencyContactName"
-            defaultValue={user.emergencyContactName}
             placeholder="John Doe"
-            onChange={handleInputChange}
-          />
-          </FormControl>
-        
-       <FormControl>
-         <FormLabel> Relationship:</FormLabel>
-          <Input
-            type="text"
-            name="relationship"
-            defaultValue={user.relationship}
-            placeholder="brother"
+            defaultValue={user.emergencyContactName}
             onChange={handleInputChange}
           />
           </FormControl>
 
-        
-       <FormControl>
-        <FormLabel>Emergency Contact Number:</FormLabel>
+       <FormControl> <FormLabel>
+          Relationship:</FormLabel>
           <Input
             type="text"
-            name="emergencyContactNumber"
-            defaultValue={user.emergencyContactNumber?.toString()}
-            placeholder="555-555-5555"
+            name="relationship"
+            placeholder="Brother"
+            defaultValue={user.relationship}
             onChange={handleInputChange}
           />
           </FormControl>
-        <Button 
-        type="submit" 
-        variant="solid" 
-        isLoading={loading}
-        loadingText='Saving'
-        colorScheme='teal'
-        spinnerPlacement='start'>Save Changes</Button>
+
+       <FormControl> <FormLabel>
+          Emergency Contact Number:</FormLabel>
+          <Input
+            type="text"
+            name="emergencyContactNumber"
+            placeholder="555-555-5555"
+            defaultValue={user.emergencyContactNumber?.toString()}
+            onChange={handleInputChange}
+          />
+          </FormControl>
+          
+       <FormControl> <Button type="submit" colorScheme="teal" size="md">
+            Save
+          </Button>
+          </FormControl>
         </Stack>
       </form>
-        </Box>
+      </Box>
       </Flex>
       <Footer />
-    </Box >
+    </Box>
   );
 };
 
 export default Settings;
-

@@ -81,6 +81,11 @@
     outline: none;
   }
 
+  .logout-button:hover {
+    text-decoration: underline;
+    filter: opacity(150%);
+  }
+
   @media screen and (min-width: 200px) {
     .topbar-list-item {
         display: none;
