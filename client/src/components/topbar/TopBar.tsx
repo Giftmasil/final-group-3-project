@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/ReduxStore";
 import { logoutUser } from "../../redux/slices/AuthenticationSlice";
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Button, IconButton, Input } from "@chakra-ui/react";
+import { Button, IconButton, Input, InputGroup, InputLeftElement, } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 
 const TopBar: React.FC = () => {
@@ -59,23 +59,11 @@ const TopBar: React.FC = () => {
                         Records
                     </Link>
                 </li>
-                <li className="topbar-list-item">
-                    <Link
-                        to="/settings"
-                        style={{ color: isCurrentPath("/settings") ? "#9747FF" : undefined, pointerEvents: isCurrentPath("/settings") ? "none" : undefined }}
-                    >
-                        <img id="profilepic" className="profile-pic" src={loggedInUser?.profileUrl || "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=1024x1024&w=is&k=20&c=oGqYHhfkz_ifeE6-dID6aM7bLz38C6vQTy1YcbgZfx8="} width={30} height={30} />
-                    </Link>
-                </li>
+                
                 {(loggedInUser?.roles.includes("Admin") || loggedInUser?.roles.includes("Employee")) && 
                 <form className="search-form" onSubmit={handleSearch}>
-                    <Input
-                        width={{ base: "50px", md: "200px" }}
-                        type="text"
-                        className="searchInput"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                    />
+                    <InputGroup>
+                    <InputLeftElement>
                     <IconButton
                         type="submit"
                         colorScheme='blue'
@@ -84,7 +72,27 @@ const TopBar: React.FC = () => {
                         size='lg'
                         icon={<SearchIcon />}
                     />
+
+                    </InputLeftElement>
+                    <Input
+                        width={{ base: "50px", md: "200px" }}
+                        type="text"
+                        className="searchInput"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        
+                    />
+                    </InputGroup>
+                   
                 </form>}
+                <li className="topbar-list-item">
+                    <Link
+                        to="/settings"
+                        style={{ color: isCurrentPath("/settings") ? "#9747FF" : undefined, pointerEvents: isCurrentPath("/settings") ? "none" : undefined }}
+                    >
+                        <img id="profilepic" className="profile-pic" src={loggedInUser?.profileUrl || "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=1024x1024&w=is&k=20&c=oGqYHhfkz_ifeE6-dID6aM7bLz38C6vQTy1YcbgZfx8="} width={30} height={30} />
+                    </Link>
+                </li>
                 <li className="topbar-list-item-button">
                     <Button className="logout-button" bg="brand.purplebtn"ml={2} colorScheme="purple" onClick={handleLogout}
                     >Logout</Button>

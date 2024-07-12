@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/ReduxStore';
 import "./HomePage.css";
@@ -18,14 +18,48 @@ import {
     DrawerCloseButton,
     useDisclosure,
     Input, 
-    Heading } from '@chakra-ui/react';
+    Heading, 
+    useToast
+} from '@chakra-ui/react';
 import Footer from '../../components/footer/Footer';
+import axios from 'axios';
+import Typewriter from '../../components/TypeWriter';
 
 const Home: React.FC = () => {
     const loggedInUser = useSelector((state: RootState) => state.user.user);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const btnRef = React.useRef(null);
-  
+    const btnRef = useRef(null);
+    const chatbotRef = useRef<HTMLInputElement>(null);
+    const [aiResponse, setAiResponse] = useState<string>("");
+    const [userInput, setUserInput] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false)
+    const toast = useToast()
+
+    const handleAskAi = async () => {
+        try {
+            if (!userInput) return;
+            setLoading(true);
+            const response = await axios.post("https://chat-bot-group-3.onrender.com/get_advice", { query: userInput });
+            setAiResponse(response.data.response.trim());
+            setLoading(false)
+        } catch (error) {
+            toast({
+                title: "Error",
+                description: "There was an error fetching the response. Please try again later.",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            })
+            setAiResponse("There was an error fetching the response.");
+            setLoading(false)
+        }
+    }
+
+    const clearUserInput = () => {
+        setAiResponse("")
+        setUserInput("");
+    }
+
     useEffect(() => {
         // Fetch other user details if available
     }, [loggedInUser]);
@@ -41,11 +75,11 @@ const Home: React.FC = () => {
     return (
         <div>
             <TopBar />
-            <Box textAlign="center" p={4} >
+            <Box textAlign="center" p={4}>
                 <Heading as="h1" size="xl" mt={2} mb={6}>
                     Q-response is an emergency response app designed to quickly assess and report emergencies
                 </Heading>
-                <Button mt = {2} className='emergency-button' onClick={toEmergency} colorScheme='red'>
+                <Button mt={2} className='emergency-button' onClick={toEmergency} colorScheme='red'>
                     <i className="fa-solid fa-bullhorn"></i> Emergency
                 </Button>
             </Box>
@@ -61,18 +95,31 @@ const Home: React.FC = () => {
                         </Button>
                         <Text ml={2}>Learn first aid with AI</Text>
                     </Flex>
-                    <Drawer isOpen={isOpen} placement='right' onClose={onClose} finalFocusRef={btnRef}>
+                    <Drawer isOpen={isOpen} placement='right' onClose={
+                        ()=> {
+                        clearUserInput()
+                        onClose()
+                        }} finalFocusRef={btnRef}>
                         <DrawerOverlay />
                         <DrawerContent>
                             <DrawerCloseButton />
                             <DrawerHeader>Ask the AI</DrawerHeader>
                             <DrawerBody>
-                                <Input placeholder='Type here...' />
-                                <Text>AI text</Text>
+                                <Input 
+                                    ref={chatbotRef} 
+                                    placeholder='Type here...' 
+                                    value={userInput}
+                                    onChange={(e) => setUserInput(e.target.value)}
+                                />
+                                {aiResponse && <Typewriter text={aiResponse} />}
                             </DrawerBody>
                             <DrawerFooter>
-                                <Button variant='outline' mr={3} onClick={onClose}>Cancel</Button>
-                                <Button colorScheme='blue'>Ask</Button>
+                                <Button variant='outline' mr={3} onClick={
+                                    ()=>{
+                                    clearUserInput()
+                                    onClose()
+                                    }}>Cancel</Button>
+                                <Button colorScheme='blue' isLoading={loading} onClick={handleAskAi}>Ask</Button>
                             </DrawerFooter>
                         </DrawerContent>
                     </Drawer>
