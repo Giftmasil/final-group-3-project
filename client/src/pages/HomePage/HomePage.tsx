@@ -24,6 +24,7 @@ import {
 import Footer from '../../components/footer/Footer';
 import axios from 'axios';
 import Typewriter from '../../components/TypeWriter';
+import { Link } from 'react-router-dom';
 
 const Home: React.FC = () => {
     const loggedInUser = useSelector((state: RootState) => state.user.user);
@@ -68,10 +69,6 @@ const Home: React.FC = () => {
         return <p>You are not logged in. Please log in to view your details.</p>;
     }
 
-    const toEmergency = () => {
-        window.location.href = '/emergency';
-    }
-
     return (
         <div>
             <TopBar />
@@ -79,9 +76,11 @@ const Home: React.FC = () => {
                 <Heading as="h1" size="xl" mt={2} mb={6}>
                     Q-response is an emergency response app designed to quickly assess and report emergencies
                 </Heading>
-                <Button mt={2} className='emergency-button' onClick={toEmergency} colorScheme='red'>
+                <Link to="/emergency">
+                <Button mt={2} className='emergency-button' colorScheme='red'>
                     <i className="fa-solid fa-bullhorn"></i> Emergency
                 </Button>
+                </Link>
             </Box>
             <Flex p={5} direction={{ base: 'column', md: 'row' }} alignItems="center" justifyContent="center" mt={8} mx="auto" mb={10}>
                 <Image w={{ base: '100%', md: '50%' }} src="https://plus.unsplash.com/premium_vector-1682310717908-db9ed503a9c3?q=80&w=1800&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="first aid kit" borderRadius="10px" mb={{ base: 4, md: 0 }} />

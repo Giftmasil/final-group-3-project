@@ -7,12 +7,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { fetchUser } from './redux/slices/UserSlice';
 import Register from './pages/register/Register';
-import EmergencyForm from './pages/emergency/EmergencyForm';
 import EmergencyDetailsPage from './pages/EmergencyDetailsPage/EmergencyDetailsPage';
 import Settings from './pages/settings/Settings';
 import Alerts from './pages/Alerts/Alerts';
 import Records from './pages/Records/Records';
 import SearchResults from './pages/SearchResults/SearchResults';
+import EmergencyForm from './pages/emergency/EmergencyForm';
 
 function App() {
   const { success } = useSelector((state: RootState) => state.authentication);
