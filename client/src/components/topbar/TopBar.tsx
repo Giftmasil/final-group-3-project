@@ -18,7 +18,6 @@ const TopBar: React.FC = () => {
     const handleLogout = () => {
         dispatch(logoutUser());
         localStorage.removeItem("userId");
-        window.location.href = "/login";
     };
 
     const handleSearch = (e: React.FormEvent) => {
@@ -95,8 +94,8 @@ const TopBar: React.FC = () => {
                     </Link>
                 </li>
                 <li className="topbar-list-item-button">
-                    <Button className="logout-button" bg="brand.purplebtn"ml={2} colorScheme="purple" onClick={handleLogout}
-                    >Logout</Button>
+                    <Link to="/login"><Button className="logout-button" bg="brand.purplebtn"ml={2} colorScheme="purple" onClick={handleLogout}
+                    >Logout</Button></Link>
                 </li>
             </ul>
         </nav>
