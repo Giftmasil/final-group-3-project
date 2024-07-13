@@ -16,6 +16,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../../redux/slices/AuthenticationSlice';
 import { AppDispatch, RootState } from '../../redux/ReduxStore';
+import { useNavigate } from "react-router-dom";
 
 const Register: React.FC = () => {
   const usernameRef = useRef<HTMLInputElement>(null);
@@ -28,6 +29,7 @@ const Register: React.FC = () => {
   const [show, setShow] = React.useState(false);
   const handleShow = () => setShow(!show);
   const toast = useToast();
+  const navigate =useNavigate()
 
   const handleRegisterUser = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -89,7 +91,7 @@ const Register: React.FC = () => {
   }, [auth, toast]);
 
   const handleBackToLogin = () => {
-    window.location.href = "/login";
+    navigate("/login")
   }
 
   const formWidth = useBreakpointValue({ base: "100%", md: "50%" });
