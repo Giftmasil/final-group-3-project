@@ -19,7 +19,7 @@ const initialState: EmergencySliceState = {
 export const fetchAllEmergencies = createAsyncThunk(
     "emergency/fetchAll",
     async () => {
-        const response = await axios.get("http://localhost:3500/emergency");
+        const response = await axios.get("https://final-group-3-project-backend.onrender.com/emergency");
         return response.data;
     }
 );
@@ -28,7 +28,7 @@ export const fetchSingleEmergency = createAsyncThunk(
     "emergency/fetchSingle",
     async (id: string, thunkAPI) => {
         try {
-            const response = await axios.get(`http://localhost:3500/emergency/${id}`);
+            const response = await axios.get(`https://final-group-3-project-backend.onrender.com/emergency/${id}`);
             return response.data.emergency;
         } catch (e) {
             return thunkAPI.rejectWithValue(e);
@@ -40,7 +40,7 @@ export const updateEmergencyStatus = createAsyncThunk(
     "emergency/updateStatus",
     async ({ id, newEmergency }:{id:string, newEmergency:Emergency}, thunkAPI) => {
         try {
-            const response = await axios.patch(`http://localhost:3500/emergency/${id}`, { newEmergency });
+            const response = await axios.patch(`https://final-group-3-project-backend.onrender.com/emergency/${id}`, { newEmergency });
             return response.data.emergency;
         } catch (e) {
             return thunkAPI.rejectWithValue(e);
@@ -52,7 +52,7 @@ export const createEmergency = createAsyncThunk(
     "emergency/create",
     async (emergency: Emergency, thunkAPI) => {
         try {
-            const response = await axios.post("http://localhost:3500/emergency", emergency);
+            const response = await axios.post("https://final-group-3-project-backend.onrender.com/emergency", emergency);
             return response.data.emergency;
         } catch (e) {
             return thunkAPI.rejectWithValue(e);

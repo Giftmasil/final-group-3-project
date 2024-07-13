@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { FetchUserPayload, LoginUserPayload, RegisterUserPayload, User } from "../../models/User";
+import { LoginUserPayload, RegisterUserPayload, User } from "../../models/User";
 
 export interface AuthenticationSliceState {
     loggedInUser: User | undefined,
@@ -20,7 +20,7 @@ export const loginUser = createAsyncThunk(
     "auth/login",
     async (user: LoginUserPayload, thunkAPI) => {
         try {
-            const response = await axios.post("http://localhost:3500/auth/login", user);
+            const response = await axios.post("https://final-group-3-project-backend.onrender.com/auth/login", user);
             console.log(response.data);
             return response.data.user;
         } catch (e) {
@@ -33,7 +33,7 @@ export const registerUser = createAsyncThunk(
     "auth/register",
     async (user: RegisterUserPayload, thunkAPI) => {
         try {
-            const response = await axios.post("http://localhost:3500/auth/register", user);
+            const response = await axios.post("https://final-group-3-project-backend.onrender.com/auth/register", user);
             return response.data.user;
         } catch (e) {
             return thunkAPI.rejectWithValue(e);
@@ -45,7 +45,7 @@ export const logoutUser = createAsyncThunk(
     "auth/logout",
     async (_, thunkAPI) => {
         try {
-            const response = await axios.post("http://localhost:3500/auth/logout");
+            const response = await axios.post("https://final-group-3-project-backend.onrender.com/auth/logout");
             return response.data.user;
         } catch (e) {
             return thunkAPI.rejectWithValue(e);

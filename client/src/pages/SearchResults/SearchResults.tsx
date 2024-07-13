@@ -23,7 +23,7 @@ const SearchResults: React.FC = () => {
             if (query) {
                 setLoading(true); // Set loading to true before fetching
                 try {
-                    const response = await axios.get(`http://localhost:3500/users/search?query=${query}`);
+                    const response = await axios.get(`https://final-group-3-project-backend.onrender.com/users/search?query=${query}`);
                     setResults(response.data);
                 } catch (error) {
                     console.error('Error fetching search results:', error);

@@ -1,7 +1,7 @@
 /* import axios from 'axios';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:3500',
+    baseURL: 'https://final-group-3-project-backend.onrender.com',
 });
 
 axiosInstance.interceptors.request.use(

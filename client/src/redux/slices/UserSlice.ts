@@ -20,7 +20,7 @@ export const fetchUser = createAsyncThunk(
     "user/fetch",
     async (payload: { userId: string }, thunkAPI) => {
         try {
-            const response = await axios.get(`http://localhost:3500/users/${payload.userId}`);
+            const response = await axios.get(`https://final-group-3-project-backend.onrender.com/users/${payload.userId}`);
             
             return response.data.user;
         } catch (e) {
@@ -33,7 +33,7 @@ export const updateUser = createAsyncThunk(
     "user/update",
     async (user: User, thunkAPI) => {
         try {
-            const response = await axios.patch(`http://localhost:3500/users/`, user);
+            const response = await axios.patch(`https://final-group-3-project-backend.onrender.com/users/`, user);
             return response.data.user;
         } catch (e) {
             return thunkAPI.rejectWithValue(e);
