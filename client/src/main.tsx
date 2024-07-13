@@ -5,7 +5,8 @@ import { store } from './redux/ReduxStore.ts'
 import App from './App.tsx'
 import { ChakraProvider } from '@chakra-ui/react'
 import './index.css'
-import 'leaflet/dist/leaflet.css'
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import theme from './theme/theme.ts'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
