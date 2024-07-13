@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import { HashRouter, Route, Routes, Navigate } from 'react-router-dom';
 import Home from './pages/HomePage/HomePage';
 import Login from './pages/login/Login';
 import { AppDispatch, RootState } from './redux/ReduxStore';
@@ -17,7 +17,7 @@ import EmergencyForm from './pages/emergency/EmergencyForm';
 function App() {
   const { success } = useSelector((state: RootState) => state.authentication);
   const loggedInUser = useSelector((state: RootState) => state.user.user);
-  
+
   const dispatch: AppDispatch = useDispatch();
   const [userFetched, setUserFetched] = useState(false);
 
@@ -34,7 +34,7 @@ function App() {
   }, [loggedInUser, dispatch, success, userFetched]);
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/" element={loggedInUser ? <Home /> : <Navigate to="/login" />} />
         <Route path="/login" element={loggedInUser ? <Navigate to="/" /> : <Login />} />
@@ -47,7 +47,7 @@ function App() {
         <Route path='/search' element={<SearchResults />}/>
         <Route path="*" element={<Home />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

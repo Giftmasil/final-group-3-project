@@ -26,6 +26,13 @@ app.use('/auth', require('./routes/authRoutes'));
 app.use('/users', require('./routes/userRoutes'));
 app.use('/emergency', require('./routes/emergencyRoute'));
 
+// Serve React App
+app.use(express.static(path.join(__dirname, 'client/build')));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+});
+
 // Handle 404 Errors
 app.all('*', (req, res) => {
     res.status(404);
