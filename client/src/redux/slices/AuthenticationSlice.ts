@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import {  LoginUserPayload, RegisterUserPayload, User } from "../../models/User";
+import { LoginUserPayload, RegisterUserPayload, User } from "../../models/User";
 
 export interface AuthenticationSliceState {
     loggedInUser: User | undefined,

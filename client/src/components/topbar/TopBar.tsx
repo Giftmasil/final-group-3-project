@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./TopBar.css";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/ReduxStore";
@@ -8,7 +8,7 @@ import { Button, IconButton, Input, InputGroup, InputLeftElement, } from "@chakr
 import { SearchIcon } from "@chakra-ui/icons";
 
 const TopBar: React.FC = () => {
-    const loggedInUser = useSelector((state: RootState) => state.user.user);
+    const {user} = useSelector((state: RootState) => state.user);
     const dispatch: AppDispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
@@ -18,8 +18,16 @@ const TopBar: React.FC = () => {
     const handleLogout = async () => {
         await dispatch(logoutUser());
         localStorage.removeItem("userId");
-        navigate("/login");
+        window.location.hash = "#/login";
     };
+
+    useEffect(()=>{
+        if(!user){
+            navigate("/login");
+        }
+    },[navigate, user])
+    
+    
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
@@ -61,7 +69,7 @@ const TopBar: React.FC = () => {
                     </Link>
                 </li>
                 
-                {(loggedInUser?.roles.includes("Admin") || loggedInUser?.roles.includes("Employee")) && 
+                {(user?.roles.includes("Admin") || user?.roles.includes("Employee")) && 
                 <form className="search-form" onSubmit={handleSearch}>
                     <InputGroup>
                     <InputLeftElement>
@@ -91,7 +99,7 @@ const TopBar: React.FC = () => {
                         to="/settings"
                         style={{ color: isCurrentPath("/settings") ? "#9747FF" : undefined, pointerEvents: isCurrentPath("/settings") ? "none" : undefined }}
                     >
-                        <img id="profilepic" className="profile-pic" src={loggedInUser?.profileUrl || "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=1024x1024&w=is&k=20&c=oGqYHhfkz_ifeE6-dID6aM7bLz38C6vQTy1YcbgZfx8="} width={30} height={30} />
+                        <img id="profilepic" className="profile-pic" src={user?.profileUrl || "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=1024x1024&w=is&k=20&c=oGqYHhfkz_ifeE6-dID6aM7bLz38C6vQTy1YcbgZfx8="} width={30} height={30} />
                     </Link>
                 </li>
                 <li className="topbar-list-item-button">

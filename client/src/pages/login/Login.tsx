@@ -60,6 +60,7 @@ const Login: React.FC = () => {
         email: emailRef.current.value,
         password: passwordRef.current.value,
       })).unwrap();
+      navigate('/');
 
       if (auth.success) {
         toast({
