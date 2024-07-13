@@ -17,6 +17,7 @@ const TopBar: React.FC = () => {
 
     const handleLogout = () => {
         dispatch(logoutUser());
+        localStorage.removeItem("userId");
         window.location.href = "/login";
     };
 

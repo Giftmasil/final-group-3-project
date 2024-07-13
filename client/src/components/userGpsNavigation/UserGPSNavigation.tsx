@@ -134,6 +134,10 @@ const UserGPSNavigation: React.FC<UserGPSNavigationProps> = ({
           setCurrentDirectionIndex(0);
           speakNextDirection();
         });
+
+        routingControlRef.current.on('routingerror', (error) => {
+          console.error('Routing error:', error);
+        });
       }
     }
 
