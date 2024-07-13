@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { fetchUser } from './redux/slices/UserSlice';
 import Register from './pages/register/Register';
-import Emergency from './pages/emergency/EmergencyForm';
+import EmergencyForm from './pages/emergency/EmergencyForm';
 import EmergencyDetailsPage from './pages/EmergencyDetailsPage/EmergencyDetailsPage';
 import Settings from './pages/settings/Settings';
 import Alerts from './pages/Alerts/Alerts';
@@ -39,7 +39,7 @@ function App() {
         <Route path="/" element={loggedInUser ? <Home /> : <Navigate to="/login" />} />
         <Route path="/login" element={loggedInUser ? <Navigate to="/" /> : <Login />} />
         <Route path="/register" element={loggedInUser ? <Navigate to="/" /> : <Register />} />
-        <Route path="/emergency" element={<Emergency />} />
+        <Route path="/emergency" element={<EmergencyForm />} />
         <Route path="/emergency/:id" element={<EmergencyDetailsPage />} />
         <Route path='/settings' element={<Settings />} />
         <Route path='/alerts' element={<Alerts />} />
