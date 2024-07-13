@@ -15,8 +15,8 @@ const TopBar: React.FC = () => {
 
     const [searchQuery, setSearchQuery] = useState("");
 
-    const handleLogout = () => {
-        dispatch(logoutUser());
+    const handleLogout = async () => {
+        await dispatch(logoutUser());
         localStorage.removeItem("userId");
         navigate("/login");
     };
