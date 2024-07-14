@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 test('test', async ({ page }) => {
-  await page.goto('http://localhost:5173/');
-  await page.goto('http://localhost:5173/#/login');
+  await page.goto('https://final-group-3-project.onrender.com/');
+  await page.goto('https://final-group-3-project.onrender.com/#/login');
   await page.getByPlaceholder('angela@gmail.com').click();
   await page.getByPlaceholder('angela@gmail.com').fill('');
   await page.getByRole('button', { name: 'Signup' }).click();
@@ -25,8 +25,8 @@ test('test', async ({ page }) => {
   await page.getByPlaceholder('Enter password').fill('testing');
   await page.getByRole('button', { name: 'Show' }).click();
   await page.getByRole('button', { name: 'Login' }).click();
-  await page.goto('http://localhost:5173/#/login');
-  await page.goto('http://localhost:5173/#/');
+  await page.goto('https://final-group-3-project.onrender.com/#/login');
+  await page.goto('https://final-group-3-project.onrender.com/#/');
   await page.getByRole('link', { name: 'Alerts' }).click();
   await page.getByRole('link', { name: 'Records' }).click();
   await page.getByRole('link').nth(3).click();
@@ -40,5 +40,5 @@ test('test', async ({ page }) => {
   await page.getByRole('button', { name: ' Emergency' }).click();
   await page.getByRole('button', { name: 'Cancel' }).click();
   await page.getByRole('button', { name: 'Logout' }).click();
-  await page.goto('http://localhost:5173/#/login');
+  await page.goto('https://final-group-3-project.onrender.com/#/login');
 });
