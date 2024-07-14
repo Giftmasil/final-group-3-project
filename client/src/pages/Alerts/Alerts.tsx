@@ -139,11 +139,6 @@ const EmergencyItemComponent: React.FC<EmergencyItemProps> = ({ emergency, setRe
   };
 
   const handleModalHeaderClick = (emergencyId: string) => {
-    if (user?.roles.includes("User")) {
-      navigate(`/alerts`);
-      onClose()
-      return
-    }
     navigate(`/emergency/${emergencyId}`);
     onClose();
   };
@@ -156,7 +151,7 @@ const EmergencyItemComponent: React.FC<EmergencyItemProps> = ({ emergency, setRe
     <li key={emergency._id} className="emergency-container card">
       <Box className="card-content">
         <h3 className="emergency-title">{emergency.title}</h3>
-        <p className={`emergency-status status-${emergency.status.toLowerCase()}`}><span style={{color:"#333333"}}>Status:</span> {emergency.status}</p>
+        <p className={`emergency-status status-${emergency.status.toLowerCase()}`}>Status: {emergency.status}</p>
         {emergency.createdAt && (
           <p className="emergency-time">
             <span style={{ fontWeight: "bolder" }}>Time requested:</span>{" "}
@@ -204,18 +199,13 @@ const EmergencyItemComponent: React.FC<EmergencyItemProps> = ({ emergency, setRe
               </Stack>
             </ModalBody>
             <ModalFooter>
-            <Button variant="outline" _hover={{ bg: '#9747FF' , textDecoration: 'underline', color:'white'}} mr={3} onClick={onClose}>
+              <Button variant="ghost" mr={3} onClick={onClose}>
                 Close
               </Button>
               {(emergency.status === "Delivered" || emergency.status === "Pending") &&
                 (user?.roles.includes("Admin") || user?.roles.includes("Employee")) && (
                   <Button
-                    variant="outline"
-                    bg="#9747FF"
-                    color="white"
-                    _hover={{ bg: 'white' , textDecoration: 'underline', color:'black'}}
-                  
-
+                    colorScheme="green"
                     onClick={emergency.status === "Delivered" ? handleAccept : handleDone}
                   >
                     {emergency.status === "Delivered" ? "Accept" : "Done"}
