@@ -17,8 +17,11 @@ import {
   ModalCloseButton,
   useDisclosure,
   Heading,
+  Stack,
+  Text
 } from "@chakra-ui/react";
 import Footer from "../../components/footer/Footer";
+
 
 const Records: React.FC = () => {
   const [emergencies, setEmergencies] = useState<Emergency[]>([]);
@@ -73,7 +76,7 @@ const RecordItemComponent: React.FC<RecordItemProps> = ({ emergency }) => {
     <li key={emergency._id} className="emergency-container card">
       <Box tabIndex={-1} aria-label="Focus moved to this box" className="card-content">
         <h3 className="record-title">{emergency.title}</h3>
-        <p className={`emergency-status status-${emergency.status.toLowerCase()}`}>Status: {emergency.status}</p>
+        <p className={`emergency-status status-${emergency.status.toLowerCase()}`}><span style={{color: "black"}}>Status: </span>{emergency.status}</p>
         {emergency.updatedAt && (
           <p className="emergency-time">
             <span style={{ fontWeight: "bolder" }}>Time requested:</span>{" "}
@@ -90,43 +93,56 @@ const RecordItemComponent: React.FC<RecordItemProps> = ({ emergency }) => {
             <ModalHeader>Emergency Details</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <p>
+              <Stack spacing={3}>
+              <Text>
                 <span style={{ fontWeight: "bolder" }}>User ID</span>: {emergency.user}
-              </p>
-              <p>
+              </Text>
+              <Text>
                 <span style={{ fontWeight: "bolder" }}>Status</span>: {emergency.status}
-              </p>
-              <h2>
-                <span style={{ fontWeight: "bolder", fontSize: "2rem" }}>
+              </Text>
+              <Heading as="h2" size="xl">
+              
                   {emergency.title}
-                </span>
-              </h2>
-              <p>
+            
+              </Heading>
+              <Text>
                 <span style={{ fontWeight: "bolder" }}>Location:</span> {emergency.place}
-              </p>
-              <p>
+              </Text>
+              <Text>
                 <span style={{ fontWeight: "bolder" }}>Condition:</span> {emergency.condition}
-              </p>
-              <p>
+              </Text>
+              <Text>
                 <span style={{ fontWeight: "bolder" }}>Description:</span> {emergency.description}
-              </p>
-              <p>
+              </Text>
+              <Text>
                 <span style={{ fontWeight: "bolder" }}>Responder:</span> {emergency.responder}
-              </p>
+              </Text>
               {emergency.createdAt && (
-                <p>
+                <Text>
                   <span style={{ fontWeight: "bolder" }}>Time requested:</span> {new Date(emergency.createdAt).toLocaleString()}
-                </p>
+                </Text>
               )}
               {emergency.updatedAt && (
-                  <p>
+                  <Text>
                     <span style={{ fontWeight: "bolder" }}>Time resolved:</span> {new Date(emergency.updatedAt).toLocaleString()}
-                  </p>
+                  </Text>
               )}
+              </Stack>
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme="blue" mr={3} onClick={onClose}>
+              <Button colorScheme="purple" mr={3} 
+              _hover={{bg:"white", color:"black", textDecoration: "underline"}
+              }
+              onClick={onClose}>
                 Close
+              </Button>
+              <Button 
+              colorScheme="purple" 
+              mr={3} 
+              _hover={{bg:"white", color:"black", textDecoration: "underline"}
+              }
+              variant="outline">
+                <a href="https://feedback-nu5c.onrender.com">Give Feedback</a>
               </Button>
             </ModalFooter>
           </ModalContent>

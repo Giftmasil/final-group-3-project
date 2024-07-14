@@ -88,7 +88,7 @@ const Home: React.FC = () => {
                     <Heading as="h2" size="lg" mb={4}>
                         What are your thoughts on being prepared in case of an emergency? It's time to level up your skills.
                     </Heading>
-                    <Flex alignItems="center" mt={4}>
+                    <Flex alignItems="center" mt={4} mb={6}>
                         <Button variant="ghost" ref={btnRef} onClick={onOpen}>
                             <Image boxSize='50px' objectFit='cover' borderRadius='full' src="https://plus.unsplash.com/premium_vector-1712873279566-379ba42df159?q=80&w=580&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="learn first aid" />
                         </Button>
@@ -113,12 +113,14 @@ const Home: React.FC = () => {
                                 {aiResponse && <Typewriter text={aiResponse} />}
                             </DrawerBody>
                             <DrawerFooter>
-                                <Button variant='outline' mr={3} onClick={
+                                <Button variant='outline' _hover={{  textDecoration: "underline"}
+                                 } mr={3} onClick={
                                     ()=>{
                                     clearUserInput()
                                     onClose()
                                     }}>Cancel</Button>
-                                <Button colorScheme='blue' isLoading={loading} onClick={handleAskAi}>Ask</Button>
+                                <Button colorScheme='purple' _hover={{ color:"black", textDecoration: "underline"}
+                                 }isLoading={loading} onClick={handleAskAi}>Ask</Button>
                             </DrawerFooter>
                         </DrawerContent>
                     </Drawer>

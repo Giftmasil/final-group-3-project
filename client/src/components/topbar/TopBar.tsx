@@ -45,9 +45,9 @@ const TopBar: React.FC = () => {
             </div>
             <ul className="topbar-unordered-list">
                 <li className="topbar-list-item">
-                    <Link
+                <Link
                         to="/"
-                        style={{ color: isCurrentPath("/") ? "#9747FF" : undefined, pointerEvents: isCurrentPath("/") ? "none" : undefined }}
+                        style={{ color: isCurrentPath("/") ? "#9747FF" : undefined, pointerEvents: isCurrentPath("/") ? "none" : undefined, textDecoration: isCurrentPath("/") ? "underline" : "none" }}
                     >
                         Home
                     </Link>
@@ -55,7 +55,7 @@ const TopBar: React.FC = () => {
                 <li className="topbar-list-item">
                     <Link
                         to="/alerts"
-                        style={{ color: isCurrentPath("/alerts") ? "#9747FF" : undefined, pointerEvents: isCurrentPath("/alerts") ? "none" : undefined }}
+                        style={{ color: isCurrentPath("/alerts") ? "#9747FF" : undefined, pointerEvents: isCurrentPath("/alerts") ? "none" : undefined, textDecoration: isCurrentPath("/alerts") ? "underline" : "none"}}
                     >
                         Alerts
                     </Link>
@@ -63,7 +63,7 @@ const TopBar: React.FC = () => {
                 <li className="topbar-list-item">
                     <Link
                         to="/records"
-                        style={{ color: isCurrentPath("/records") ? "#9747FF" : undefined, pointerEvents: isCurrentPath("/records") ? "none" : undefined }}
+                        style={{ color: isCurrentPath("/records") ? "#9747FF" : undefined, pointerEvents: isCurrentPath("/records") ? "none" : undefined, textDecoration: isCurrentPath("/records") ? "underline" : "none"}}
                     >
                         Records
                     </Link>
