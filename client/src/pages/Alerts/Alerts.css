@@ -39,7 +39,7 @@ li {
   .modal-header {
     cursor: pointer;
     text-decoration: underline;
-    color: blue;
+    color: #5718A9;
   }
 
   .status-delivered {
@@ -84,7 +84,7 @@ li {
 
   .userId {
     text-decoration: underline;
-    color: blue;
+    color: #5718A9;
     cursor: pointer;
     font-weight: bolder;
   }
