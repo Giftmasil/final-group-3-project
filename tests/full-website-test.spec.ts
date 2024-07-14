@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 test('test', async ({ page }) => {
-  await page.goto('https://final-group-3-project.onrender.com/');
-  await page.goto('https://final-group-3-project.onrender.com/#/login');
+  await page.goto('https://final-group-3-project.vercel.app/');
+  await page.goto('https://final-group-3-project.vercel.app/#/login');
   await page.getByPlaceholder('angela@gmail.com').click();
   await page.getByPlaceholder('angela@gmail.com').fill('');
   await page.getByRole('button', { name: 'Signup' }).click();
@@ -25,9 +25,13 @@ test('test', async ({ page }) => {
   await page.getByPlaceholder('Enter password').fill('testing');
   await page.getByRole('button', { name: 'Show' }).click();
   await page.getByRole('button', { name: 'Login' }).click();
-  await page.goto('https://final-group-3-project.onrender.com/#/login');
-  await page.goto('https://final-group-3-project.onrender.com/#/');
+  await page.goto('https://final-group-3-project.vercel.app/#/login');
+  await page.goto('https://final-group-3-project.vercel.app/#/');
+  
+  // Ensure the element is visible before clicking
+  await page.waitForSelector('role=link[name="Alerts"]', { state: 'visible', timeout: 5000 });
   await page.getByRole('link', { name: 'Alerts' }).click();
+
   await page.getByRole('link', { name: 'Records' }).click();
   await page.getByRole('link').nth(3).click();
   await page.getByRole('link', { name: 'Home' }).click();
@@ -40,5 +44,5 @@ test('test', async ({ page }) => {
   await page.getByRole('button', { name: ' Emergency' }).click();
   await page.getByRole('button', { name: 'Cancel' }).click();
   await page.getByRole('button', { name: 'Logout' }).click();
-  await page.goto('https://final-group-3-project.onrender.com/#/login');
+  await page.goto('https://final-group-3-project.vercel.app/#/login');
 });
